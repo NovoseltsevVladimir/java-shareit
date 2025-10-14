@@ -14,7 +14,6 @@ public class ItemRepositoryInMemory implements ItemRepository {
     private HashMap<Long, Item> items;
     private HashMap<Long, Item> avaliableItems;
     private HashMap<Long, Long> owners;
-    ;
 
     private Long maxId;
 

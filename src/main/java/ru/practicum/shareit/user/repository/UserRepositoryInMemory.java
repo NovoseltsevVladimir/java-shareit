@@ -60,13 +60,13 @@ public class UserRepositoryInMemory implements UserRepository {
     }
 
     @Override
-    public boolean isEmailExist(String Email, Long userId) {
+    public boolean isEmailExist(String email, Long userId) {
         return users
                 .values()
                 .stream()
                 .filter(user -> user.getId() != userId)
                 .map(user -> user.getEmail())
-                .filter(email -> Email.equals(email))
+                .filter(currentEmail -> currentEmail.equals(email))
                 .collect(Collectors.toList()).size() > 0;
     }
 
