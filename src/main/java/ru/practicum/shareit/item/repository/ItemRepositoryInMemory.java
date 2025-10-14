@@ -36,7 +36,7 @@ public class ItemRepositoryInMemory implements ItemRepository {
 
         for (Long itemId : owners.keySet()) {
             Long currentUserId = owners.get(itemId);
-            if (currentUserId == userId) {
+            if (currentUserId.equals(userId)) {
                 usersItems.add(items.get(itemId));
             }
         }
@@ -110,6 +110,6 @@ public class ItemRepositoryInMemory implements ItemRepository {
 
     @Override
     public boolean canUserEditItem(Long itemId, Long userId) {
-        return owners.get(itemId) == userId;
+        return owners.get(itemId).equals(userId);
     }
 }

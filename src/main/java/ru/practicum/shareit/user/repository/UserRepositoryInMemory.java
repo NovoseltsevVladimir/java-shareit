@@ -64,7 +64,7 @@ public class UserRepositoryInMemory implements UserRepository {
         return users
                 .values()
                 .stream()
-                .filter(user -> user.getId() != userId)
+                .filter(user -> (!user.getId().equals(userId)))
                 .map(user -> user.getEmail())
                 .filter(currentEmail -> currentEmail.equals(email))
                 .collect(Collectors.toList()).size() > 0;
