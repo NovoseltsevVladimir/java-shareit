@@ -3,15 +3,15 @@ package ru.practicum.shareit.user.mapper;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.practicum.shareit.user.model.User;
-import ru.practicum.shareit.user.dto.NewUserRequest;
-import ru.practicum.shareit.user.dto.UpdateUserRequest;
+import ru.practicum.shareit.user.dto.NewUserDto;
+import ru.practicum.shareit.user.dto.UpdateUserDto;
 import ru.practicum.shareit.user.dto.UserDto;
 
 @Component
 @NoArgsConstructor
 public class UserMapper {
 
-    public static User mapToUser(NewUserRequest request) {
+    public static User mapToUser(NewUserDto request) {
 
         User user = new User();
         user.setName(request.getName());
@@ -30,7 +30,7 @@ public class UserMapper {
         return userDto;
     }
 
-    public static User updateUserFields(User user, UpdateUserRequest request) {
+    public static User updateUserFields(User user, UpdateUserDto request) {
 
         if (request.hasName()) {
             user.setName(request.getName());

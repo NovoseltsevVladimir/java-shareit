@@ -6,8 +6,8 @@ import org.springframework.stereotype.Service;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.user.validator.UserValidator;
-import ru.practicum.shareit.user.dto.NewUserRequest;
-import ru.practicum.shareit.user.dto.UpdateUserRequest;
+import ru.practicum.shareit.user.dto.NewUserDto;
+import ru.practicum.shareit.user.dto.UpdateUserDto;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.mapper.UserMapper;
 import ru.practicum.shareit.user.model.User;
@@ -50,7 +50,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto create(NewUserRequest newUser) {
+    public UserDto create(NewUserDto newUser) {
         User user = UserMapper.mapToUser(newUser);
 
         if (repository.isEmailExist(user.getEmail(), null)) {
@@ -65,7 +65,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto update(UpdateUserRequest newUser) {
+    public UserDto update(UpdateUserDto newUser) {
         Long id = newUser.getId();
 
         User userInMemory = repository.findById(id);
@@ -76,11 +76,7 @@ public class UserServiceImpl implements UserService {
         }
         User updatedUser = UserMapper.updateUserFields(userInMemory, newUser);
 
-        if (!UserValidator.isUserValid(updatedUser)) {
-            String bugValidationText = "Ошибка валидации";
-            log.warn(bugValidationText);
-            throw new ValidationException(bugValidationText);
-        }
+       UserValidator.validateUser(updatedUser);
 
         if (repository.isEmailExist(updatedUser.getEmail(), id)) {
             String bugEmailText = "Email " + updatedUser.getEmail() + "существует";

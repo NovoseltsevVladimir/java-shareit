@@ -3,7 +3,7 @@ package ru.practicum.shareit.item.dto;
 import lombok.Data;
 
 @Data
-public class UpdateItemRequest {
+public class UpdateItemDto {
     private Long id;
     private String name;
     private String description;

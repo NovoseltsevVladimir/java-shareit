@@ -6,8 +6,8 @@ import org.springframework.stereotype.Service;
 import ru.practicum.shareit.exception.ForbiddenException;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.item.dto.NewItemRequest;
-import ru.practicum.shareit.item.dto.UpdateItemRequest;
+import ru.practicum.shareit.item.dto.NewItemDto;
+import ru.practicum.shareit.item.dto.UpdateItemDto;
 import ru.practicum.shareit.item.mapper.ItemMapper;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.ItemRepository;
@@ -51,7 +51,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public ItemDto create(NewItemRequest item, Long userId) {
+    public ItemDto create(NewItemDto item, Long userId) {
 
         checkUser(userId);
 
@@ -63,7 +63,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public ItemDto update(UpdateItemRequest item, Long userId) {
+    public ItemDto update(UpdateItemDto item, Long userId) {
         Long id = item.getId();
 
         checkUser(userId);

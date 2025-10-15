@@ -3,9 +3,10 @@ package ru.practicum.shareit.item.controller;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.shareit.BasicConrollerInterface;
 import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.item.dto.NewItemRequest;
-import ru.practicum.shareit.item.dto.UpdateItemRequest;
+import ru.practicum.shareit.item.dto.NewItemDto;
+import ru.practicum.shareit.item.dto.UpdateItemDto;
 import ru.practicum.shareit.item.service.ItemService;
 
 import java.util.Collection;
@@ -15,7 +16,7 @@ import java.util.Collection;
  */
 @RestController
 @RequestMapping("/items")
-public class ItemController {
+public class ItemController implements BasicConrollerInterface {
 
     private ItemService itemService;
 
@@ -25,7 +26,7 @@ public class ItemController {
     }
 
     @GetMapping
-    public Collection<ItemDto> findAll(@RequestHeader("X-Sharer-User-Id") long userId) {
+    public Collection<ItemDto> findAll(@RequestHeader(USER_ID_HEADER_NAME) long userId) {
         return itemService.findAll(userId);
     }
 
@@ -35,22 +36,22 @@ public class ItemController {
     }
 
     @PostMapping
-    public ItemDto create(@Valid @RequestBody NewItemRequest item,
-                          @RequestHeader("X-Sharer-User-Id") long userId) {
+    public ItemDto create(@Valid @RequestBody NewItemDto item,
+                          @RequestHeader(USER_ID_HEADER_NAME) long userId) {
         return itemService.create(item, userId);
     }
 
     @PatchMapping("/{itemId}")
-    public ItemDto update(@Valid @RequestBody UpdateItemRequest newItem,
+    public ItemDto update(@Valid @RequestBody UpdateItemDto newItem,
                           @PathVariable("itemId") Long itemId,
-                          @RequestHeader("X-Sharer-User-Id") long userId) {
+                          @RequestHeader(USER_ID_HEADER_NAME) long userId) {
         newItem.setId(itemId);
         return itemService.update(newItem, userId);
     }
 
     @DeleteMapping("/{itemId}")
     public ItemDto deleteItem(@PathVariable("id") Long itemId,
-                              @RequestHeader("X-Sharer-User-Id") long userId) {
+                              @RequestHeader(USER_ID_HEADER_NAME) long userId) {
 
         return itemService.delete(itemId, userId);
     }

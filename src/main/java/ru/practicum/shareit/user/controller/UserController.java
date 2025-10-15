@@ -3,9 +3,9 @@ package ru.practicum.shareit.user.controller;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.user.dto.NewUserRequest;
+import ru.practicum.shareit.user.dto.NewUserDto;
 import ru.practicum.shareit.user.dto.UserDto;
-import ru.practicum.shareit.user.dto.UpdateUserRequest;
+import ru.practicum.shareit.user.dto.UpdateUserDto;
 import ru.practicum.shareit.user.service.UserService;
 
 import java.util.Collection;
@@ -36,12 +36,12 @@ public class UserController {
     }
 
     @PostMapping
-    public UserDto create(@Valid @RequestBody NewUserRequest user) {
+    public UserDto create(@Valid @RequestBody NewUserDto user) {
         return userService.create(user);
     }
 
     @PatchMapping("/{userId}")
-    public UserDto update(@RequestBody UpdateUserRequest newUser,
+    public UserDto update(@RequestBody UpdateUserDto newUser,
                           @PathVariable long userId) {
         newUser.setId(userId);
         return userService.update(newUser);
