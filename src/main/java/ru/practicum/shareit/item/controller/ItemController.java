@@ -3,7 +3,7 @@ package ru.practicum.shareit.item.controller;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.BasicConrollerInterface;
+import ru.practicum.shareit.ShareitConstants;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.NewItemDto;
 import ru.practicum.shareit.item.dto.UpdateItemDto;
@@ -16,7 +16,7 @@ import java.util.Collection;
  */
 @RestController
 @RequestMapping("/items")
-public class ItemController implements BasicConrollerInterface {
+public class ItemController implements ShareitConstants {
 
     private ItemService itemService;
 
