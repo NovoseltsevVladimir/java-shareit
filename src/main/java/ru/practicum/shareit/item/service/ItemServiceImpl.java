@@ -56,7 +56,7 @@ public class ItemServiceImpl implements ItemService {
         checkUser(userId);
 
         Item newItem = ItemMapper.mapToItem(item);
-        newItem.setOwner(userId);
+        newItem.setOwner(userRepository.findById(userId));
         newItem = repository.create(newItem);
 
         return ItemMapper.mapToItemDto(newItem);
@@ -77,7 +77,7 @@ public class ItemServiceImpl implements ItemService {
         }
 
         Item updatedItem = repository.update(ItemMapper.updateItemFields(itemInMemory, item));
-        updatedItem.setOwner(userId);
+        updatedItem.setOwner(userRepository.findById(userId));
 
         return ItemMapper.mapToItemDto(updatedItem);
     }

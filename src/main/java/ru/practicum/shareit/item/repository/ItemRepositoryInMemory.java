@@ -67,7 +67,7 @@ public class ItemRepositoryInMemory implements ItemRepository {
     @Override
     public Item create(Item item) {
 
-        Long ownerId = item.getOwner();
+        Long ownerId = item.getOwner().getId();
         Long itemId = getNewId();
         item.setId(itemId);
 
