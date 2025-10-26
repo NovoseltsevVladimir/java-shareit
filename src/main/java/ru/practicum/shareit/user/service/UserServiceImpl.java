@@ -104,4 +104,15 @@ public class UserServiceImpl implements UserService {
         return UserMapper.mapToUserDto(userInMemory);
     }
 
+    public User findUserById (Long userId) {
+        User user = repository.findById(userId);
+        if (user == null) {
+            String bugText = "Пользователь не найден. id " + userId;
+            log.warn(bugText);
+            throw new NotFoundException(bugText);
+        }
+
+        return user;
+    }
+
 }

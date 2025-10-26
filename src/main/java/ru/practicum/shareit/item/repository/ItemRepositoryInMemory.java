@@ -50,6 +50,11 @@ public class ItemRepositoryInMemory implements ItemRepository {
     }
 
     @Override
+    public Item findAvaliableItemById(Long itemId) {
+        return avaliableItems.get(itemId);
+    }
+
+    @Override
     public Collection<Item> findAvaliableItemByText(String text) {
 
         Collection<Item> itemsCollection = new ArrayList<>();

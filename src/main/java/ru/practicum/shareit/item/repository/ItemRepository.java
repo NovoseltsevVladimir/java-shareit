@@ -10,6 +10,8 @@ public interface ItemRepository {
 
     Item findById(Long itemId);
 
+    Item findAvaliableItemById(Long itemId);
+
     Collection<Item> findAvaliableItemByText(String text);
 
     Item create(Item item);

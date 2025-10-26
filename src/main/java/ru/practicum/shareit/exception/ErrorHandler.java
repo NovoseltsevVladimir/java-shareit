@@ -28,6 +28,14 @@ public class ErrorHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorResponse handleNotAvaliableException(final NotAvaliableException e) {
+
+        return new ErrorResponse(e.getMessage());
+    }
+
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorResponse handleThrowableException(final Throwable e) {
         return new ErrorResponse(e.getMessage());
     }

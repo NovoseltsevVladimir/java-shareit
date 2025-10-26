@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.exception.ForbiddenException;
+import ru.practicum.shareit.exception.NotAvaliableException;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.NewItemDto;
@@ -48,6 +49,24 @@ public class ItemServiceImpl implements ItemService {
         }
 
         return ItemMapper.mapToItemDto(item);
+    }
+
+    @Override
+    public Item findAvaliableItemById(Long itemId) {
+
+        Item item = repository.findById(itemId);
+        if (item == null) {
+            String bugText = "Вещь не найдена, id " + itemId;
+            log.warn(bugText);
+            throw new NotFoundException(bugText);
+        }
+
+        item = repository.findAvaliableItemById(itemId);
+       if (item == null) {
+            throw new NotAvaliableException("Вещь недоступна для бронирования");
+        }
+
+        return item;
     }
 
     @Override
