@@ -2,8 +2,12 @@ package ru.practicum.shareit.item.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import ru.practicum.shareit.item.comments.model.Comment;
 import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.user.model.User;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * TODO Sprint add-controllers.
@@ -22,15 +26,19 @@ public class Item {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "available")
-    private boolean available;
+    @Column(name = "avaliable")
+    private boolean avaliable;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "owner_id")
     private User owner;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "request_id")
     private ItemRequest request;
+
+    @ElementCollection
+    @CollectionTable(name="comments", joinColumns=@JoinColumn(name="item_id", referencedColumnName = "id"))
+    private Set<Comment> comments = new HashSet<>();;
 
 }

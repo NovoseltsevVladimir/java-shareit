@@ -1,6 +1,7 @@
 package ru.practicum.shareit.user.controller;
 
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.user.dto.NewUserDto;
@@ -21,7 +22,6 @@ public class UserController {
 
     @Autowired
     public UserController(UserService userService) {
-
         this.userService = userService;
     }
 

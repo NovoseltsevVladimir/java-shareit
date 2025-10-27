@@ -1,21 +1,31 @@
 package ru.practicum.shareit.item.service;
 
+import com.querydsl.core.types.dsl.BooleanExpression;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.exception.ForbiddenException;
 import ru.practicum.shareit.exception.NotAvaliableException;
 import ru.practicum.shareit.exception.NotFoundException;
+import ru.practicum.shareit.item.comments.dto.CommentDto;
+import ru.practicum.shareit.item.comments.dto.NewCommentDto;
+import ru.practicum.shareit.item.comments.mapper.CommentMapper;
+import ru.practicum.shareit.item.comments.model.Comment;
+import ru.practicum.shareit.item.comments.repository.CommentRepository;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.NewItemDto;
 import ru.practicum.shareit.item.dto.UpdateItemDto;
 import ru.practicum.shareit.item.mapper.ItemMapper;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.item.model.QItem;
 import ru.practicum.shareit.item.repository.ItemRepository;
+import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -24,26 +34,32 @@ public class ItemServiceImpl implements ItemService {
 
     private ItemRepository repository;
     private UserRepository userRepository;
+    private CommentRepository commentRepository;
 
     @Autowired
-    public ItemServiceImpl(ItemRepository repository, UserRepository userRepository) {
+    public ItemServiceImpl(ItemRepository repository, UserRepository userRepository, CommentRepository commentRepository) {
         this.repository = repository;
         this.userRepository = userRepository;
+        this.commentRepository = commentRepository;
     }
 
     @Override
     public Collection<ItemDto> findAll(Long userId) {
 
-        return repository.findAllUsersItems(userId)
-                .stream()
-                .map(item -> ItemMapper.mapToItemDto(item))
-                .collect(Collectors.toList());
+        BooleanExpression byOwnerId = QItem.item.owner.id.eq(userId);
+
+        Collection<ItemDto> itemDtoCollection = new ArrayList<>();
+        for (Item item : repository.findAll(byOwnerId)) {
+            itemDtoCollection.add(ItemMapper.mapToItemDto(item));
+        }
+
+        return itemDtoCollection;
     }
 
     @Override
     public ItemDto findById(Long itemId) {
 
-        Item item = repository.findById(itemId);
+        Item item = repository.findById(itemId).get();
         if (item == null) {
             throw new NotFoundException("Вещь не найдена");
         }
@@ -54,15 +70,14 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public Item findAvaliableItemById(Long itemId) {
 
-        Item item = repository.findById(itemId);
+        Item item = repository.findById(itemId).get();
         if (item == null) {
             String bugText = "Вещь не найдена, id " + itemId;
             log.warn(bugText);
             throw new NotFoundException(bugText);
         }
 
-        item = repository.findAvaliableItemById(itemId);
-       if (item == null) {
+        if (item.isAvaliable() == false) {
             throw new NotAvaliableException("Вещь недоступна для бронирования");
         }
 
@@ -75,8 +90,8 @@ public class ItemServiceImpl implements ItemService {
         checkUser(userId);
 
         Item newItem = ItemMapper.mapToItem(item);
-        newItem.setOwner(userRepository.findById(userId));
-        newItem = repository.create(newItem);
+        newItem.setOwner(userRepository.findById(userId).get());
+        newItem = repository.save(newItem);
 
         return ItemMapper.mapToItemDto(newItem);
     }
@@ -88,15 +103,15 @@ public class ItemServiceImpl implements ItemService {
         checkUser(userId);
         checkUserPermissions(id, userId);
 
-        Item itemInMemory = repository.findById(id);
+        Item itemInMemory = repository.findById(id).get();
         if (itemInMemory == null) {
             String bugText = "Вещь не найдена, id " + id;
             log.warn(bugText);
             throw new NotFoundException(bugText);
         }
 
-        Item updatedItem = repository.update(ItemMapper.updateItemFields(itemInMemory, item));
-        updatedItem.setOwner(userRepository.findById(userId));
+        Item updatedItem = repository.save(ItemMapper.updateItemFields(itemInMemory, item));
+        updatedItem.setOwner(userRepository.findById(userId).get());
 
         return ItemMapper.mapToItemDto(updatedItem);
     }
@@ -107,7 +122,7 @@ public class ItemServiceImpl implements ItemService {
         checkUser(userId);
         checkUserPermissions(itemId, userId);
 
-        Item itemInMemory = repository.findById(itemId);
+        Item itemInMemory = repository.findById(itemId).get();
 
         if (itemInMemory == null) {
             String bugText = "Вещь не найдена, id " + itemId;
@@ -127,7 +142,7 @@ public class ItemServiceImpl implements ItemService {
             return new ArrayList<>();
         }
 
-        Collection<ItemDto> itemsDto = repository.findAvaliableItemByText(text)
+        Collection<ItemDto> itemsDto = repository.search(text)
                 .stream()
                 .map(item -> ItemMapper.mapToItemDto(item))
                 .collect(Collectors.toList());
@@ -136,7 +151,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     private void checkUser(Long userId) {
-        if (!userRepository.isUserExist(userId)) {
+        if (userRepository.findById(userId).isEmpty()) {
             String bugText = "Пользователь не найден, id " + userId;
             log.warn(bugText);
             throw new NotFoundException(bugText);
@@ -144,10 +159,42 @@ public class ItemServiceImpl implements ItemService {
     }
 
     private void checkUserPermissions(Long itemId, Long userId) {
-        if (!repository.canUserEditItem(itemId, userId)) {
+        Item item = repository.findById(itemId).get();
+
+        if (item == null) {
+            String bugText = "Вещь не найдена, id " + itemId;
+            log.warn(bugText);
+            throw new NotFoundException(bugText);
+        }
+
+        if (item.getOwner().getId()!=userId) {
             String bugText = "Доступ запрещен, id пользователя " + userId + " id вещи " + itemId;
             log.warn(bugText);
             throw new ForbiddenException(bugText);
         }
+    }
+
+    @Override
+    public CommentDto createComment (NewCommentDto newComment) {
+        User user = userRepository.findById(newComment.getAuthorId()).get();
+        if (user == null) {
+            String bugText = "Пользователь не найден, id " + newComment.getAuthorId();
+            log.warn(bugText);
+            throw new NotFoundException(bugText);
+        }
+
+        Item item = repository.findById(newComment.getItemId()).get();
+        if (item == null) {
+            String bugText = "Вещь не найдена, id " + newComment.getItemId();
+            log.warn(bugText);
+            throw new NotFoundException(bugText);
+        }
+
+        newComment.setAuthor(user);
+        newComment.setItem(item);
+
+        Comment comment = commentRepository.save(CommentMapper.mapToComment(newComment));
+
+        return CommentMapper.mapToCommentDto(comment);
     }
 }

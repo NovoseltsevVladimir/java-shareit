@@ -1,6 +1,8 @@
 package ru.practicum.shareit.booking.service;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -114,10 +116,20 @@ public class BookingService {
     }
 
     public Collection<BookingDto> getBookersBookingList(Long userId, State state) {
-       return findByState(userId,state,true);
+       if (userService.findUserById(userId)==null) {
+           String bugText = "Пользователь не найден, id " + userId;
+           log.warn(bugText);
+           throw new NotFoundException(bugText);
+       }
+        return findByState(userId,state,true);
     }
 
     public Collection<BookingDto> getOwnersBookingList(Long userId, State state) {
+        if (userService.findUserById(userId)==null) {
+            String bugText = "Пользователь не найден, id " + userId;
+            log.warn(bugText);
+            throw new NotFoundException(bugText);
+        }
         return findByState(userId,state,false);
     }
 

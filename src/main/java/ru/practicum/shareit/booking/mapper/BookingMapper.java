@@ -1,10 +1,12 @@
 package ru.practicum.shareit.booking.mapper;
 
+import lombok.NoArgsConstructor;
 import ru.practicum.shareit.booking.Status;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.NewBookingDto;
 import ru.practicum.shareit.booking.model.Booking;
 
+@NoArgsConstructor
 public class BookingMapper {
 
     public static Booking mapToBooking(NewBookingDto request) {

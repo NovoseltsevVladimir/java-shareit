@@ -1,9 +1,12 @@
 package ru.practicum.shareit.item.controller;
 
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.ShareitConstants;
+import ru.practicum.shareit.item.comments.dto.CommentDto;
+import ru.practicum.shareit.item.comments.dto.NewCommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.NewItemDto;
 import ru.practicum.shareit.item.dto.UpdateItemDto;
@@ -63,4 +66,15 @@ public class ItemController implements ShareitConstants {
         return itemService.findAvaliableItemByText(text);
     }
 
+    //POST /items/{itemId}/comment
+    @PostMapping("{itemId}/comment")
+    public CommentDto createComment(@Valid @RequestBody NewCommentDto newComment,
+                                    @PathVariable("itemId") Long itemId,
+                                    @RequestHeader(USER_ID_HEADER_NAME) long userId) {
+
+        newComment.setItemId(itemId);
+        newComment.setAuthorId(userId);
+
+        return itemService.createComment(newComment);
+    }
 }

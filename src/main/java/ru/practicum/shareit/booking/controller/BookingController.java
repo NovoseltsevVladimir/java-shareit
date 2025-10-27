@@ -8,18 +8,11 @@ import ru.practicum.shareit.booking.State;
 import ru.practicum.shareit.booking.Status;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.NewBookingDto;
-import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.service.BookingService;
-import ru.practicum.shareit.item.model.Item;
-import ru.practicum.shareit.item.service.ItemService;
-import ru.practicum.shareit.user.model.User;
-import ru.practicum.shareit.user.service.UserService;
 
 import java.util.Collection;
-import java.util.List;
 
 import static ru.practicum.shareit.booking.Status.APPROVED;
-import static ru.practicum.shareit.booking.Status.REJECTED;
 
 /**
  * TODO Sprint add-bookings.
@@ -29,14 +22,10 @@ import static ru.practicum.shareit.booking.Status.REJECTED;
 public class BookingController implements ShareitConstants {
 
     BookingService bookingService;
-    UserService userService;
-    ItemService itemService;
 
     @Autowired
-    public BookingController(BookingService bookingService, UserService userService, ItemService itemService) {
+    public BookingController(BookingService bookingService) {
         this.bookingService = bookingService;
-        this.userService = userService;
-        this.itemService = itemService;
     }
 
     @PostMapping
