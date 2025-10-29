@@ -14,7 +14,8 @@ import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter @Setter
+@Getter
+@Setter
 public class NewBookingDto {
     @FutureOrPresent
     private LocalDateTime start;

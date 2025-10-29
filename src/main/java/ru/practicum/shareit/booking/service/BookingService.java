@@ -1,8 +1,6 @@
 package ru.practicum.shareit.booking.service;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,16 +15,13 @@ import ru.practicum.shareit.booking.repository.BookingRepository;
 import ru.practicum.shareit.exception.ForbiddenException;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.item.model.Item;
-import ru.practicum.shareit.item.model.QItem;
 import ru.practicum.shareit.item.service.ItemService;
-import ru.practicum.shareit.user.model.QUser;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.service.UserService;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -116,26 +111,26 @@ public class BookingService {
     }
 
     public Collection<BookingDto> getBookersBookingList(Long userId, State state) {
-       if (userService.findUserById(userId)==null) {
-           String bugText = "Пользователь не найден, id " + userId;
-           log.warn(bugText);
-           throw new NotFoundException(bugText);
-       }
-        return findByState(userId,state,true);
-    }
-
-    public Collection<BookingDto> getOwnersBookingList(Long userId, State state) {
-        if (userService.findUserById(userId)==null) {
+        if (userService.findUserById(userId) == null) {
             String bugText = "Пользователь не найден, id " + userId;
             log.warn(bugText);
             throw new NotFoundException(bugText);
         }
-        return findByState(userId,state,false);
+        return findByState(userId, state, true);
     }
 
-    private Collection<BookingDto> findByState (Long userId, State state, boolean byBooker){
+    public Collection<BookingDto> getOwnersBookingList(Long userId, State state) {
+        if (userService.findUserById(userId) == null) {
+            String bugText = "Пользователь не найден, id " + userId;
+            log.warn(bugText);
+            throw new NotFoundException(bugText);
+        }
+        return findByState(userId, state, false);
+    }
 
-        Iterable <Booking> bookings;
+    private Collection<BookingDto> findByState(Long userId, State state, boolean byBooker) {
+
+        Iterable<Booking> bookings;
         BooleanExpression byUserId;
         if (byBooker) {
             byUserId = QBooking.booking.booker.id.eq(userId);
@@ -154,7 +149,7 @@ public class BookingService {
         } else if (state == State.FUTURE) {
             BooleanExpression inFuture = QBooking.booking.start.after(currentDateTime);
             bookings = repository.findAll(byUserId.and(inFuture));
-        } else if (state==State.WAITING) {
+        } else if (state == State.WAITING) {
             BooleanExpression isWaiting = QBooking.booking.status.eq(Status.WAITING);
             bookings = repository.findAll(byUserId.and(isWaiting));
         } else if (state == State.CURRENT) {
@@ -162,15 +157,15 @@ public class BookingService {
             BooleanExpression betweenStart = QBooking.booking.start.before(currentDateTime);
             bookings = repository.findAll(byUserId.and(betweenStart.and(betweenStart)));
         } else {
-            throw new NotFoundException("Вид сортировки "+state + " не найден");
+            throw new NotFoundException("Вид сортировки " + state + " не найден");
         }
 
-        Collection <Booking> bookingsCollection = new ArrayList<>();
+        Collection<Booking> bookingsCollection = new ArrayList<>();
         bookings.forEach(bookingsCollection::add);
 
         return bookingsCollection
                 .stream()
-                .map(booking->BookingMapper.mapToBookingDto(booking))
+                .map(booking -> BookingMapper.mapToBookingDto(booking))
                 .collect(Collectors.toList());
     }
 

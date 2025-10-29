@@ -77,7 +77,7 @@ public class UserServiceImpl implements UserService {
         }
         User updatedUser = UserMapper.updateUserFields(userInMemory, newUser);
 
-       UserValidator.validateUser(updatedUser);
+        UserValidator.validateUser(updatedUser);
 
         if (isEmailExist(updatedUser.getEmail(), id)) {
             String bugEmailText = "Email " + updatedUser.getEmail() + "существует";
@@ -105,7 +105,7 @@ public class UserServiceImpl implements UserService {
         return UserMapper.mapToUserDto(userInMemory);
     }
 
-    public User findUserById (Long userId) {
+    public User findUserById(Long userId) {
         User user = repository.findById(userId).get();
         if (user == null) {
             String bugText = "Пользователь не найден. id " + userId;

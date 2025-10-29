@@ -1,10 +1,12 @@
 package ru.practicum.shareit.item.service;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.practicum.shareit.booking.Status;
+import ru.practicum.shareit.booking.model.Booking;
+import ru.practicum.shareit.booking.repository.BookingRepository;
 import ru.practicum.shareit.exception.ForbiddenException;
 import ru.practicum.shareit.exception.NotAvaliableException;
 import ru.practicum.shareit.exception.NotFoundException;
@@ -23,9 +25,10 @@ import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Optional;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -35,36 +38,41 @@ public class ItemServiceImpl implements ItemService {
     private ItemRepository repository;
     private UserRepository userRepository;
     private CommentRepository commentRepository;
+    private BookingRepository bookingRepository;
 
     @Autowired
-    public ItemServiceImpl(ItemRepository repository, UserRepository userRepository, CommentRepository commentRepository) {
+    public ItemServiceImpl(ItemRepository repository, UserRepository userRepository,
+                           CommentRepository commentRepository, BookingRepository bookingRepository) {
         this.repository = repository;
         this.userRepository = userRepository;
         this.commentRepository = commentRepository;
+        this.bookingRepository = bookingRepository;
     }
 
     @Override
     public Collection<ItemDto> findAll(Long userId) {
 
+        User currentUser = userRepository.findById(userId).get();
+
         BooleanExpression byOwnerId = QItem.item.owner.id.eq(userId);
 
         Collection<ItemDto> itemDtoCollection = new ArrayList<>();
         for (Item item : repository.findAll(byOwnerId)) {
-            itemDtoCollection.add(ItemMapper.mapToItemDto(item));
+            itemDtoCollection.add(ItemMapper.mapToItemDto(item,currentUser));
         }
 
         return itemDtoCollection;
     }
 
     @Override
-    public ItemDto findById(Long itemId) {
-
+    public ItemDto findById(Long itemId, Long userId) {
+        User currentUser = userRepository.findById(userId).get();
         Item item = repository.findById(itemId).get();
         if (item == null) {
             throw new NotFoundException("Вещь не найдена");
         }
 
-        return ItemMapper.mapToItemDto(item);
+        return ItemMapper.mapToItemDto(item,currentUser);
     }
 
     @Override
@@ -88,12 +96,13 @@ public class ItemServiceImpl implements ItemService {
     public ItemDto create(NewItemDto item, Long userId) {
 
         checkUser(userId);
+        User currentUser = userRepository.findById(userId).get();
 
         Item newItem = ItemMapper.mapToItem(item);
         newItem.setOwner(userRepository.findById(userId).get());
         newItem = repository.save(newItem);
 
-        return ItemMapper.mapToItemDto(newItem);
+        return ItemMapper.mapToItemDto(newItem,currentUser);
     }
 
     @Override
@@ -102,6 +111,8 @@ public class ItemServiceImpl implements ItemService {
 
         checkUser(userId);
         checkUserPermissions(id, userId);
+
+        User currentUser = userRepository.findById(userId).get();
 
         Item itemInMemory = repository.findById(id).get();
         if (itemInMemory == null) {
@@ -113,7 +124,7 @@ public class ItemServiceImpl implements ItemService {
         Item updatedItem = repository.save(ItemMapper.updateItemFields(itemInMemory, item));
         updatedItem.setOwner(userRepository.findById(userId).get());
 
-        return ItemMapper.mapToItemDto(updatedItem);
+        return ItemMapper.mapToItemDto(updatedItem,currentUser);
     }
 
     @Override
@@ -122,6 +133,7 @@ public class ItemServiceImpl implements ItemService {
         checkUser(userId);
         checkUserPermissions(itemId, userId);
 
+        User currentUser = userRepository.findById(userId).get();
         Item itemInMemory = repository.findById(itemId).get();
 
         if (itemInMemory == null) {
@@ -132,19 +144,19 @@ public class ItemServiceImpl implements ItemService {
 
         repository.delete(itemInMemory);
 
-        return ItemMapper.mapToItemDto(itemInMemory);
+        return ItemMapper.mapToItemDto(itemInMemory,currentUser);
     }
 
     @Override
-    public Collection<ItemDto> findAvaliableItemByText(String text) {
-
+    public Collection<ItemDto> findAvaliableItemByText(String text, Long userId) {
+        User currentUser = userRepository.findById(userId).get();
         if (text == null || text.isBlank() || text.isEmpty()) {
             return new ArrayList<>();
         }
 
         Collection<ItemDto> itemsDto = repository.search(text)
                 .stream()
-                .map(item -> ItemMapper.mapToItemDto(item))
+                .map(item -> ItemMapper.mapToItemDto(item,currentUser))
                 .collect(Collectors.toList());
 
         return itemsDto;
@@ -167,7 +179,7 @@ public class ItemServiceImpl implements ItemService {
             throw new NotFoundException(bugText);
         }
 
-        if (item.getOwner().getId()!=userId) {
+        if (item.getOwner().getId() != userId) {
             String bugText = "Доступ запрещен, id пользователя " + userId + " id вещи " + itemId;
             log.warn(bugText);
             throw new ForbiddenException(bugText);
@@ -175,7 +187,8 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public CommentDto createComment (NewCommentDto newComment) {
+    public CommentDto createComment(NewCommentDto newComment) {
+
         User user = userRepository.findById(newComment.getAuthorId()).get();
         if (user == null) {
             String bugText = "Пользователь не найден, id " + newComment.getAuthorId();
@@ -190,11 +203,23 @@ public class ItemServiceImpl implements ItemService {
             throw new NotFoundException(bugText);
         }
 
+        if (!didUserBookItem(user,item)) {
+            String bugText = "Пользователь никогда не бронировал вещь id " + newComment.getItemId();
+            log.warn(bugText);
+            throw new NotAvaliableException(bugText);
+        }
+
         newComment.setAuthor(user);
         newComment.setItem(item);
 
         Comment comment = commentRepository.save(CommentMapper.mapToComment(newComment));
 
         return CommentMapper.mapToCommentDto(comment);
+    }
+
+    private boolean didUserBookItem (User user, Item item) {
+        List<Booking> bookings = bookingRepository.getItemBookings(item, Status.APPROVED,user, LocalDateTime.now());
+
+        return bookings.size()>0;
     }
 }

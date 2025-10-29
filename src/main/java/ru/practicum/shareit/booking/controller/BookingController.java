@@ -37,40 +37,40 @@ public class BookingController implements ShareitConstants {
         return bookingService.create(bookingDto);
     }
 
-    @PatchMapping ("/{bookingId}")
+    @PatchMapping("/{bookingId}")
     public BookingDto changeBookingStatus(@PathVariable(name = "bookingId") Long bookingId,
-            @RequestParam (name = "approved") boolean approved,
-            @RequestHeader(USER_ID_HEADER_NAME) long userId) {
+                                          @RequestParam(name = "approved") boolean approved,
+                                          @RequestHeader(USER_ID_HEADER_NAME) long userId) {
 
-        Status newStatus = approved ? APPROVED: Status.REJECTED;
-        return bookingService.changeStatus(bookingId,newStatus, userId);
+        Status newStatus = approved ? APPROVED : Status.REJECTED;
+        return bookingService.changeStatus(bookingId, newStatus, userId);
 
     }
 
     //GET /bookings/{bookingId}
-    @GetMapping ("/{bookingId}")
-    public BookingDto getBookingInformation (@PathVariable(name = "bookingId") Long bookingId,
-                                             @RequestHeader(USER_ID_HEADER_NAME) long userId) {
+    @GetMapping("/{bookingId}")
+    public BookingDto getBookingInformation(@PathVariable(name = "bookingId") Long bookingId,
+                                            @RequestHeader(USER_ID_HEADER_NAME) long userId) {
 
-        return bookingService.findById(bookingId,userId);
+        return bookingService.findById(bookingId, userId);
     }
 
     //GET /bookings?state={state}
     @GetMapping
     public Collection<BookingDto> getBookersBookingList(
-            @RequestParam(name = "state", defaultValue = "ALL") State state,
+            @RequestParam(name = "state" , defaultValue = "ALL") State state,
             @RequestHeader(USER_ID_HEADER_NAME) long userId) {
 
-        return bookingService.getBookersBookingList(userId,state);
+        return bookingService.getBookersBookingList(userId, state);
     }
 
     //GET /bookings/owner?state={state}
-    @GetMapping ("/owner")
+    @GetMapping("/owner")
     public Collection<BookingDto> getOwnersBookingList(
-            @RequestParam(name = "state", defaultValue = "ALL") State state,
+            @RequestParam(name = "state" , defaultValue = "ALL") State state,
             @RequestHeader(USER_ID_HEADER_NAME) long userId) {
 
-        return bookingService.getOwnersBookingList(userId,state);
+        return bookingService.getOwnersBookingList(userId, state);
     }
 
 }

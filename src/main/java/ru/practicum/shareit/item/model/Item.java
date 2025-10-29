@@ -13,14 +13,14 @@ import java.util.Set;
  * TODO Sprint add-controllers.
  */
 @Entity
-@Table(name = "items", schema = "public")
+@Table(name = "items" , schema = "public")
 @Data
 public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "name" , nullable = false)
     private String name;
 
     @Column(name = "description")
@@ -37,8 +37,8 @@ public class Item {
     @JoinColumn(name = "request_id")
     private ItemRequest request;
 
-    @ElementCollection
-    @CollectionTable(name="comments", joinColumns=@JoinColumn(name="item_id", referencedColumnName = "id"))
-    private Set<Comment> comments = new HashSet<>();;
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "item_id")
+    private Set<Comment> comments = new HashSet<>();
 
 }

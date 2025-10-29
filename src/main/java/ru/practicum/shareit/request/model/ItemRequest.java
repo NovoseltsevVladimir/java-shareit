@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
  * TODO Sprint add-item-requests.
  */
 @Entity
-@Table(name = "requests", schema = "public")
+@Table(name = "requests" , schema = "public")
 @Data
 public class ItemRequest {
 
@@ -18,13 +18,13 @@ public class ItemRequest {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "description", nullable = false)
+    @Column(name = "description" , nullable = false)
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "requestor_id")
     private User requestor;
 
-    @Column(name = "created", nullable = false)
+    @Column(name = "created" , nullable = false)
     private LocalDateTime created;
 }

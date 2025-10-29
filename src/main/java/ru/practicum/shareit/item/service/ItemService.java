@@ -13,7 +13,7 @@ public interface ItemService {
 
     Collection<ItemDto> findAll(Long userId);
 
-    ItemDto findById(Long itemId);
+    ItemDto findById(Long itemId, Long userId);
 
     Item findAvaliableItemById(Long itemId);
 
@@ -23,7 +23,7 @@ public interface ItemService {
 
     ItemDto delete(Long itemId, Long userId);
 
-    Collection<ItemDto> findAvaliableItemByText(String text);
+    Collection<ItemDto> findAvaliableItemByText(String text, Long userId);
 
-    CommentDto createComment (NewCommentDto newComment);
+    CommentDto createComment(NewCommentDto newComment);
 }

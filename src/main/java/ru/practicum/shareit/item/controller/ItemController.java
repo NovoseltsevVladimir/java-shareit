@@ -1,7 +1,6 @@
 package ru.practicum.shareit.item.controller;
 
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.ShareitConstants;
@@ -34,8 +33,9 @@ public class ItemController implements ShareitConstants {
     }
 
     @GetMapping("/{itemId}")
-    public ItemDto findById(@PathVariable long itemId) {
-        return itemService.findById(itemId);
+    public ItemDto findById(@PathVariable long itemId,
+                            @RequestHeader(USER_ID_HEADER_NAME) long userId) {
+        return itemService.findById(itemId, userId);
     }
 
     @PostMapping
@@ -61,9 +61,10 @@ public class ItemController implements ShareitConstants {
 
     @GetMapping("/search")
     public Collection<ItemDto> findAvaliableItemByText(
-            @RequestParam(name = "text", required = true) String text) {
+            @RequestParam(name = "text" , required = true) String text,
+                    @RequestHeader(USER_ID_HEADER_NAME) long userId) {
 
-        return itemService.findAvaliableItemByText(text);
+        return itemService.findAvaliableItemByText(text,userId);
     }
 
     //POST /items/{itemId}/comment
