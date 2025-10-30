@@ -149,6 +149,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public Collection<ItemDto> findAvaliableItemByText(String text, Long userId) {
+
         User currentUser = userRepository.findById(userId).get();
         if (text == null || text.isBlank() || text.isEmpty()) {
             return new ArrayList<>();
