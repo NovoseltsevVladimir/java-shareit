@@ -225,10 +225,10 @@ public class ItemServiceImpl implements ItemService {
         return bookings.size() > 0;
     }
 
-    private ItemDto mapToItemToDto (Item item, User user) {
+    private ItemDto mapToItemToDto(Item item, User user) {
         ItemDto dto = ItemMapper.mapToItemDto(item);
 
-        if (dto.getOwner()==user) {
+        if (dto.getOwner() == user) {
             dto.setNextBooking(bookingRepository.findNextBookingDate(item, LocalDateTime.now(), Status.APPROVED));
             dto.setLastBooking(bookingRepository.findPastBookingDate(item, LocalDateTime.now(), Status.APPROVED));
         }
