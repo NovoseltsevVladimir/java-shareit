@@ -103,11 +103,11 @@ public class BookingService {
 
     private boolean isUserItemOwner(Booking booking, Long userId) {
         Item item = booking.getItem();
-        return item.getOwner().getId() == userId;
+        return item.getOwner().getId().equals(userId);
     }
 
     private boolean isUserBooker(Booking booking, Long userId) {
-        return booking.getBooker().getId() == userId;
+        return booking.getBooker().getId().equals(userId);
     }
 
     public Collection<BookingDto> getBookersBookingList(Long userId, State state) {

@@ -1,26 +1,14 @@
 package ru.practicum.shareit.item.mapper;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import ru.practicum.shareit.booking.Status;
-import ru.practicum.shareit.booking.repository.BookingRepository;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.NewItemDto;
 import ru.practicum.shareit.item.dto.UpdateItemDto;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.model.User;
 
-import java.time.LocalDateTime;
-
 @Component
 public class ItemMapper {
-
-    private static BookingRepository bookingRepository;
-
-    @Autowired
-    public ItemMapper(BookingRepository bookingRepository) {
-        this.bookingRepository = bookingRepository;
-    }
 
     public static Item mapToItem(NewItemDto request) {
 
@@ -34,7 +22,7 @@ public class ItemMapper {
         return item;
     }
 
-    public static ItemDto mapToItemDto(Item item, User user) {
+    public static ItemDto mapToItemDto(Item item) {
 
         ItemDto dto = new ItemDto();
         dto.setId(item.getId());
@@ -44,10 +32,7 @@ public class ItemMapper {
         dto.setOwner(item.getOwner());
         dto.setRequest(item.getRequest());
         dto.setComments(item.getComments());
-        if (user == item.getOwner()) {
-            dto.setNextBooking(bookingRepository.findNextBookingDate(item, LocalDateTime.now(), Status.APPROVED));
-            dto.setLastBooking(bookingRepository.findPastBookingDate(item, LocalDateTime.now(), Status.APPROVED));
-        }
+
         return dto;
     }
 

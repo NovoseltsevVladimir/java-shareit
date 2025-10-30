@@ -58,7 +58,7 @@ public class ItemServiceImpl implements ItemService {
 
         Collection<ItemDto> itemDtoCollection = new ArrayList<>();
         for (Item item : repository.findAll(byOwnerId)) {
-            itemDtoCollection.add(ItemMapper.mapToItemDto(item, currentUser));
+            itemDtoCollection.add(mapToItemToDto(item, currentUser));
         }
 
         return itemDtoCollection;
@@ -72,7 +72,7 @@ public class ItemServiceImpl implements ItemService {
             throw new NotFoundException("Вещь не найдена");
         }
 
-        return ItemMapper.mapToItemDto(item, currentUser);
+        return mapToItemToDto(item, currentUser);
     }
 
     @Override
@@ -102,7 +102,7 @@ public class ItemServiceImpl implements ItemService {
         newItem.setOwner(userRepository.findById(userId).get());
         newItem = repository.save(newItem);
 
-        return ItemMapper.mapToItemDto(newItem, currentUser);
+        return mapToItemToDto(newItem, currentUser);
     }
 
     @Override
@@ -124,7 +124,7 @@ public class ItemServiceImpl implements ItemService {
         Item updatedItem = repository.save(ItemMapper.updateItemFields(itemInMemory, item));
         updatedItem.setOwner(userRepository.findById(userId).get());
 
-        return ItemMapper.mapToItemDto(updatedItem, currentUser);
+        return mapToItemToDto(updatedItem, currentUser);
     }
 
     @Override
@@ -144,7 +144,7 @@ public class ItemServiceImpl implements ItemService {
 
         repository.delete(itemInMemory);
 
-        return ItemMapper.mapToItemDto(itemInMemory, currentUser);
+        return mapToItemToDto(itemInMemory, currentUser);
     }
 
     @Override
@@ -156,7 +156,7 @@ public class ItemServiceImpl implements ItemService {
 
         Collection<ItemDto> itemsDto = repository.search(text)
                 .stream()
-                .map(item -> ItemMapper.mapToItemDto(item, currentUser))
+                .map(item -> mapToItemToDto(item, currentUser))
                 .collect(Collectors.toList());
 
         return itemsDto;
@@ -179,7 +179,7 @@ public class ItemServiceImpl implements ItemService {
             throw new NotFoundException(bugText);
         }
 
-        if (item.getOwner().getId() != userId) {
+        if (!item.getOwner().getId().equals(userId)) {
             String bugText = "Доступ запрещен, id пользователя " + userId + " id вещи " + itemId;
             log.warn(bugText);
             throw new ForbiddenException(bugText);
@@ -221,5 +221,16 @@ public class ItemServiceImpl implements ItemService {
         List<Booking> bookings = bookingRepository.getItemBookings(item, Status.APPROVED, user, LocalDateTime.now());
 
         return bookings.size() > 0;
+    }
+
+    private ItemDto mapToItemToDto (Item item, User user) {
+        ItemDto dto = ItemMapper.mapToItemDto(item);
+
+        if (dto.getOwner()==user) {
+            dto.setNextBooking(bookingRepository.findNextBookingDate(item, LocalDateTime.now(), Status.APPROVED));
+            dto.setLastBooking(bookingRepository.findPastBookingDate(item, LocalDateTime.now(), Status.APPROVED));
+        }
+
+        return dto;
     }
 }
