@@ -12,8 +12,6 @@ import ru.practicum.shareit.booking.service.BookingService;
 
 import java.util.Collection;
 
-import static ru.practicum.shareit.booking.Status.APPROVED;
-
 @RestController
 @RequestMapping(path = "/bookings")
 public class BookingController implements ShareitConstants {
@@ -39,7 +37,7 @@ public class BookingController implements ShareitConstants {
                                           @RequestParam(name = "approved") boolean approved,
                                           @RequestHeader(USER_ID_HEADER_NAME) long userId) {
 
-        Status newStatus = approved ? APPROVED : Status.REJECTED;
+        Status newStatus = approved ? Status.APPROVED : Status.REJECTED;
         return bookingService.changeStatus(bookingId, newStatus, userId);
 
     }
