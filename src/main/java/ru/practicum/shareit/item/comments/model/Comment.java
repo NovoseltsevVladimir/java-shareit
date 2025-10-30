@@ -2,8 +2,6 @@ package ru.practicum.shareit.item.comments.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.ToString;
-import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.model.User;
 
 import java.time.LocalDateTime;
