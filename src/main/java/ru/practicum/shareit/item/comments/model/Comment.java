@@ -7,7 +7,7 @@ import ru.practicum.shareit.user.model.User;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "comments" , schema = "public")
+@Table(name = "comments", schema = "public")
 @Data
 public class Comment {
 
@@ -15,17 +15,17 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "text" , nullable = false)
+    @Column(name = "text", nullable = false)
     private String text;
 
-    @Column(name = "item_id" , nullable = false)
+    @Column(name = "item_id", nullable = false)
     private Long itemId;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "author_id")
     private User author;
 
-    @Column(name = "created" , nullable = false)
+    @Column(name = "created", nullable = false)
     private LocalDateTime created;
 
 }
