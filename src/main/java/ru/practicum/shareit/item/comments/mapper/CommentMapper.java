@@ -13,7 +13,7 @@ public class CommentMapper {
     public static Comment mapToComment(NewCommentDto request) {
 
         Comment comment = new Comment();
-        comment.setItem(request.getItem());
+        comment.setItemId(request.getItemId());
         comment.setAuthor(request.getAuthor());
         comment.setText(request.getText());
         comment.setCreated(LocalDateTime.now());
@@ -26,7 +26,7 @@ public class CommentMapper {
         CommentDto dto = new CommentDto();
         dto.setAuthorName(comment.getAuthor().getName());
         dto.setId(comment.getId());
-        dto.setItem(comment.getItem());
+        dto.setItemId(comment.getItemId());
         dto.setText(comment.getText());
         dto.setCreated(comment.getCreated());
 

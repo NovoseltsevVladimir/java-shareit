@@ -1,11 +1,13 @@
 package ru.practicum.shareit.booking.mapper;
 
 import lombok.NoArgsConstructor;
+import org.springframework.stereotype.Component;
 import ru.practicum.shareit.booking.Status;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.NewBookingDto;
 import ru.practicum.shareit.booking.model.Booking;
 
+@Component
 @NoArgsConstructor
 public class BookingMapper {
 

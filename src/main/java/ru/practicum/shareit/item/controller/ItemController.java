@@ -13,9 +13,6 @@ import ru.practicum.shareit.item.service.ItemService;
 
 import java.util.Collection;
 
-/**
- * TODO Sprint add-controllers.
- */
 @RestController
 @RequestMapping("/items")
 public class ItemController implements ShareitConstants {
@@ -61,10 +58,10 @@ public class ItemController implements ShareitConstants {
 
     @GetMapping("/search")
     public Collection<ItemDto> findAvaliableItemByText(
-            @RequestParam(name = "text" , required = true) String text,
-                    @RequestHeader(USER_ID_HEADER_NAME) long userId) {
+            @RequestParam(name = "text", required = true) String text,
+            @RequestHeader(USER_ID_HEADER_NAME) long userId) {
 
-        return itemService.findAvaliableItemByText(text,userId);
+        return itemService.findAvaliableItemByText(text, userId);
     }
 
     //POST /items/{itemId}/comment

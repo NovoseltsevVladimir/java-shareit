@@ -8,12 +8,8 @@ import ru.practicum.shareit.user.model.User;
 
 import java.time.LocalDateTime;
 
-/**
- * TODO Sprint add-bookings.
- */
-
 @Entity
-@Table(name = "bookings" , schema = "public")
+@Table(name = "bookings", schema = "public")
 @Data
 public class Booking {
 
@@ -21,10 +17,10 @@ public class Booking {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "start_date" , nullable = false)
+    @Column(name = "start_date", nullable = false)
     private LocalDateTime start;
 
-    @Column(name = "end_date" , nullable = false)
+    @Column(name = "end_date", nullable = false)
     private LocalDateTime end;
 
     @ManyToOne(fetch = FetchType.EAGER)

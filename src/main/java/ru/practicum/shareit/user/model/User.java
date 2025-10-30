@@ -7,7 +7,7 @@ import lombok.*;
  * TODO Sprint add-controllers.
  */
 @Entity
-@Table(name = "users" , schema = "public")
+@Table(name = "users", schema = "public")
 @Getter
 @Setter
 @ToString
@@ -17,9 +17,9 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name" , nullable = false)
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "email" , nullable = false)
+    @Column(name = "email", nullable = false)
     private String email;
 }

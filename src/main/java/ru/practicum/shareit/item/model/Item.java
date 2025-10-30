@@ -6,21 +6,21 @@ import ru.practicum.shareit.item.comments.model.Comment;
 import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.user.model.User;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * TODO Sprint add-controllers.
  */
 @Entity
-@Table(name = "items" , schema = "public")
+@Table(name = "items", schema = "public")
 @Data
 public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name" , nullable = false)
+    @Column(name = "name", nullable = false)
     private String name;
 
     @Column(name = "description")
@@ -39,6 +39,6 @@ public class Item {
 
     @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "item_id")
-    private Set<Comment> comments = new HashSet<>();
+    private List<Comment> comments = new ArrayList<>();
 
 }

@@ -9,12 +9,10 @@ import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.NewItemDto;
 import ru.practicum.shareit.item.dto.UpdateItemDto;
 import ru.practicum.shareit.item.model.Item;
-import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.user.model.User;
 
 import java.time.LocalDateTime;
 
-@NoArgsConstructor
 @Component
 public class ItemMapper {
 

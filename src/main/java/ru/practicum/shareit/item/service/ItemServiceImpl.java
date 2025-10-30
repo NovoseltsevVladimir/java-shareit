@@ -58,7 +58,7 @@ public class ItemServiceImpl implements ItemService {
 
         Collection<ItemDto> itemDtoCollection = new ArrayList<>();
         for (Item item : repository.findAll(byOwnerId)) {
-            itemDtoCollection.add(ItemMapper.mapToItemDto(item,currentUser));
+            itemDtoCollection.add(ItemMapper.mapToItemDto(item, currentUser));
         }
 
         return itemDtoCollection;
@@ -72,7 +72,7 @@ public class ItemServiceImpl implements ItemService {
             throw new NotFoundException("Вещь не найдена");
         }
 
-        return ItemMapper.mapToItemDto(item,currentUser);
+        return ItemMapper.mapToItemDto(item, currentUser);
     }
 
     @Override
@@ -102,7 +102,7 @@ public class ItemServiceImpl implements ItemService {
         newItem.setOwner(userRepository.findById(userId).get());
         newItem = repository.save(newItem);
 
-        return ItemMapper.mapToItemDto(newItem,currentUser);
+        return ItemMapper.mapToItemDto(newItem, currentUser);
     }
 
     @Override
@@ -124,7 +124,7 @@ public class ItemServiceImpl implements ItemService {
         Item updatedItem = repository.save(ItemMapper.updateItemFields(itemInMemory, item));
         updatedItem.setOwner(userRepository.findById(userId).get());
 
-        return ItemMapper.mapToItemDto(updatedItem,currentUser);
+        return ItemMapper.mapToItemDto(updatedItem, currentUser);
     }
 
     @Override
@@ -144,7 +144,7 @@ public class ItemServiceImpl implements ItemService {
 
         repository.delete(itemInMemory);
 
-        return ItemMapper.mapToItemDto(itemInMemory,currentUser);
+        return ItemMapper.mapToItemDto(itemInMemory, currentUser);
     }
 
     @Override
@@ -156,7 +156,7 @@ public class ItemServiceImpl implements ItemService {
 
         Collection<ItemDto> itemsDto = repository.search(text)
                 .stream()
-                .map(item -> ItemMapper.mapToItemDto(item,currentUser))
+                .map(item -> ItemMapper.mapToItemDto(item, currentUser))
                 .collect(Collectors.toList());
 
         return itemsDto;
@@ -203,7 +203,7 @@ public class ItemServiceImpl implements ItemService {
             throw new NotFoundException(bugText);
         }
 
-        if (!didUserBookItem(user,item)) {
+        if (!didUserBookItem(user, item)) {
             String bugText = "Пользователь никогда не бронировал вещь id " + newComment.getItemId();
             log.warn(bugText);
             throw new NotAvaliableException(bugText);
@@ -217,9 +217,9 @@ public class ItemServiceImpl implements ItemService {
         return CommentMapper.mapToCommentDto(comment);
     }
 
-    private boolean didUserBookItem (User user, Item item) {
-        List<Booking> bookings = bookingRepository.getItemBookings(item, Status.APPROVED,user, LocalDateTime.now());
+    private boolean didUserBookItem(User user, Item item) {
+        List<Booking> bookings = bookingRepository.getItemBookings(item, Status.APPROVED, user, LocalDateTime.now());
 
-        return bookings.size()>0;
+        return bookings.size() > 0;
     }
 }

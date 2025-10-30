@@ -14,9 +14,6 @@ import java.util.Collection;
 
 import static ru.practicum.shareit.booking.Status.APPROVED;
 
-/**
- * TODO Sprint add-bookings.
- */
 @RestController
 @RequestMapping(path = "/bookings")
 public class BookingController implements ShareitConstants {
@@ -47,7 +44,6 @@ public class BookingController implements ShareitConstants {
 
     }
 
-    //GET /bookings/{bookingId}
     @GetMapping("/{bookingId}")
     public BookingDto getBookingInformation(@PathVariable(name = "bookingId") Long bookingId,
                                             @RequestHeader(USER_ID_HEADER_NAME) long userId) {
@@ -55,22 +51,19 @@ public class BookingController implements ShareitConstants {
         return bookingService.findById(bookingId, userId);
     }
 
-    //GET /bookings?state={state}
     @GetMapping
     public Collection<BookingDto> getBookersBookingList(
-            @RequestParam(name = "state" , defaultValue = "ALL") State state,
+            @RequestParam(name = "state", defaultValue = "ALL") State state,
             @RequestHeader(USER_ID_HEADER_NAME) long userId) {
 
         return bookingService.getBookersBookingList(userId, state);
     }
 
-    //GET /bookings/owner?state={state}
     @GetMapping("/owner")
     public Collection<BookingDto> getOwnersBookingList(
-            @RequestParam(name = "state" , defaultValue = "ALL") State state,
+            @RequestParam(name = "state", defaultValue = "ALL") State state,
             @RequestHeader(USER_ID_HEADER_NAME) long userId) {
 
         return bookingService.getOwnersBookingList(userId, state);
     }
-
 }

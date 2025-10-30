@@ -20,9 +20,8 @@ public class Comment {
     @Column(name = "text" , nullable = false)
     private String text;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @ToString.Exclude
-    private Item item;
+    @Column(name = "item_id" , nullable = false)
+    private Long itemId;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "author_id")
