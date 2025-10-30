@@ -107,6 +107,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public ItemDto update(UpdateItemDto item, Long userId) {
+
         Long id = item.getId();
 
         checkUser(userId);
