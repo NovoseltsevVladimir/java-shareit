@@ -29,7 +29,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Collection<UserDto> findAll() {
-
         return repository.findAll()
                 .stream()
                 .map(user -> UserMapper.mapToUserDto(user))
@@ -39,7 +38,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto findById(Long userId) {
 
-        User user = repository.findById(userId);
+        User user = repository.findById(userId).get();
+
         if (user == null) {
             String bugText = "Пользователь не найден. id " + userId;
             log.warn(bugText);
@@ -53,13 +53,13 @@ public class UserServiceImpl implements UserService {
     public UserDto create(NewUserDto newUser) {
         User user = UserMapper.mapToUser(newUser);
 
-        if (repository.isEmailExist(user.getEmail(), null)) {
+        if (isEmailExist(user.getEmail(), null)) {
             String bugText = "Email " + user.getEmail() + " существует";
             log.warn(bugText);
             throw new ValidationException(bugText);
         }
 
-        repository.create(user);
+        user = repository.save(user);
 
         return UserMapper.mapToUserDto(user);
     }
@@ -68,7 +68,7 @@ public class UserServiceImpl implements UserService {
     public UserDto update(UpdateUserDto newUser) {
         Long id = newUser.getId();
 
-        User userInMemory = repository.findById(id);
+        User userInMemory = repository.findById(id).get();
         if (userInMemory == null) {
             String bugText = "Пользователь не найден. id " + id;
             log.warn(bugText);
@@ -76,22 +76,22 @@ public class UserServiceImpl implements UserService {
         }
         User updatedUser = UserMapper.updateUserFields(userInMemory, newUser);
 
-       UserValidator.validateUser(updatedUser);
+        UserValidator.validateUser(updatedUser);
 
-        if (repository.isEmailExist(updatedUser.getEmail(), id)) {
+        if (isEmailExist(updatedUser.getEmail(), id)) {
             String bugEmailText = "Email " + updatedUser.getEmail() + "существует";
             log.warn(bugEmailText);
             throw new ValidationException(bugEmailText);
         }
 
-        updatedUser = repository.update(updatedUser);
+        updatedUser = repository.save(updatedUser);
 
         return UserMapper.mapToUserDto(updatedUser);
     }
 
     @Override
     public UserDto delete(Long userId) {
-        User userInMemory = repository.findById(userId);
+        User userInMemory = repository.findById(userId).get();
 
         if (userInMemory == null) {
             String bugText = "Пользователь не найден. id " + userInMemory.getId();
@@ -102,6 +102,30 @@ public class UserServiceImpl implements UserService {
         repository.delete(userInMemory);
 
         return UserMapper.mapToUserDto(userInMemory);
+    }
+
+    public User findUserById(Long userId) {
+        User user = repository.findById(userId).get();
+        if (user == null) {
+            String bugText = "Пользователь не найден. id " + userId;
+            log.warn(bugText);
+            throw new NotFoundException(bugText);
+        }
+
+        return user;
+    }
+
+    public boolean isEmailExist(String email, Long userId) {
+        return repository.findAll()
+                .stream()
+                .filter(user -> (!user.getId().equals(userId)))
+                .map(user -> user.getEmail())
+                .filter(currentEmail -> currentEmail.equals(email))
+                .collect(Collectors.toList()).size() > 0;
+    }
+
+    public boolean isUserExist(Long id) {
+        return repository.findById(id).isPresent();
     }
 
 }

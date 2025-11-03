@@ -1,16 +1,27 @@
 package ru.practicum.shareit.item.dto;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import ru.practicum.shareit.item.comments.model.Comment;
+import ru.practicum.shareit.request.model.ItemRequest;
+import ru.practicum.shareit.user.model.User;
 
-/**
- * TODO Sprint add-controllers.
- */
-@Data
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+@NoArgsConstructor
+@Getter
+@Setter
 public class ItemDto {
     private Long id;
     private String name;
     private String description;
     private Boolean available;
-    private Long owner;
-    private String request;
+    private User owner;
+    private ItemRequest request;
+    private LocalDateTime lastBooking;
+    private LocalDateTime nextBooking;
+    private List<Comment> comments = new ArrayList<>();
 }
