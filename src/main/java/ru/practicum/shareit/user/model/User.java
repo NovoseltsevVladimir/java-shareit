@@ -10,6 +10,7 @@ import lombok.*;
 @Table(name = "users", schema = "public")
 @Getter
 @Setter
+@NoArgsConstructor
 @ToString
 public class User {
 

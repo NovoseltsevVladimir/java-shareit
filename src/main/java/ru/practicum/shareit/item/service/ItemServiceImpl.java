@@ -220,8 +220,8 @@ public class ItemServiceImpl implements ItemService {
     }
 
     private boolean didUserBookItem(User user, Item item) {
-        List<Booking> bookings = bookingRepository.getItemBookings(item, Status.APPROVED, user, LocalDateTime.now());
-
+        List<Booking> bookings = bookingRepository.findByItemAndStatusAndBookerAndEndLessThan(
+                item, Status.APPROVED, user, LocalDateTime.now());
         return bookings.size() > 0;
     }
 

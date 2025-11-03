@@ -22,7 +22,5 @@ public class NewBookingDto {
     @NotNull
     private Long itemId;
     private Long bookerId;
-    private Item itemObject;
-    private User bookerObject;
 
 }

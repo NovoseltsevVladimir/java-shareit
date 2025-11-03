@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS bookings (
   end_date TIMESTAMP WITHOUT TIME ZONE,
   item_id BIGINT REFERENCES items(id),
   booker_id BIGINT REFERENCES users(id),
-  status VARCHAR (8) CHECK (status IN ('WAITING', 'APPROVED', 'REJECTED', 'CANCELED'))
+  status VARCHAR (8)
 );
 
 CREATE TABLE IF NOT EXISTS comments (

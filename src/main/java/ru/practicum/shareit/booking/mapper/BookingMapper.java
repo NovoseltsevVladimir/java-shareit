@@ -6,19 +6,21 @@ import ru.practicum.shareit.booking.Status;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.NewBookingDto;
 import ru.practicum.shareit.booking.model.Booking;
+import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.user.model.User;
 
 @Component
 @NoArgsConstructor
 public class BookingMapper {
 
-    public static Booking mapToBooking(NewBookingDto request) {
+    public static Booking mapToBooking(NewBookingDto request, User booker, Item item) {
 
         Booking booking = new Booking();
         booking.setStatus(Status.WAITING);
         booking.setStart(request.getStart());
         booking.setEnd(request.getEnd());
-        booking.setBooker(request.getBookerObject());
-        booking.setItem(request.getItemObject());
+        booking.setBooker(booker);
+        booking.setItem(item);
 
         return booking;
     }

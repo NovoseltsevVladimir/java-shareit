@@ -22,7 +22,7 @@ public interface BookingRepository extends JpaRepository<Booking, Long>,
             "WHERE b.item = ?1 AND b.end < ?2 AND b.status = ?3")
     LocalDateTime findPastBookingDate(Item item, LocalDateTime now, Status status);
 
-    @Query("SELECT b FROM Booking b " +
-            "WHERE b.item = ?1 AND b.status = ?2 AND b.booker = ?3 AND b.end<?4")
-    List<Booking> getItemBookings(Item item, Status status, User booker, LocalDateTime currentDate);
+    List<Booking> findByItemAndStatusAndBookerAndEndLessThan(Item item, Status status,
+                                                             User booker, LocalDateTime currentDate);
+
 }

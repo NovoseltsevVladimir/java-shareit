@@ -45,10 +45,7 @@ public class BookingService {
         User booker = userService.findUserById(bookingDto.getBookerId());
         Item item = itemService.findAvaliableItemById(bookingDto.getItemId());
 
-        bookingDto.setBookerObject(booker);
-        bookingDto.setItemObject(item);
-
-        Booking newBooking = BookingMapper.mapToBooking(bookingDto);
+        Booking newBooking = BookingMapper.mapToBooking(bookingDto, booker, item);
 
         newBooking = repository.save(newBooking);
 
