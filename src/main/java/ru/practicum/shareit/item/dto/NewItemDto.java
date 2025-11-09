@@ -19,5 +19,5 @@ public class NewItemDto {
     @NotNull
     private Boolean available;
     private User owner;
-    private ItemRequest request;
+    private Long requestId;
 }

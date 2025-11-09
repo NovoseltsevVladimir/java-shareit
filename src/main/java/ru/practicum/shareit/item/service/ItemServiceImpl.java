@@ -22,6 +22,8 @@ import ru.practicum.shareit.item.mapper.ItemMapper;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.model.QItem;
 import ru.practicum.shareit.item.repository.ItemRepository;
+import ru.practicum.shareit.request.model.ItemRequest;
+import ru.practicum.shareit.request.repository.ItemRequestRepository;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
 
@@ -39,14 +41,17 @@ public class ItemServiceImpl implements ItemService {
     private UserRepository userRepository;
     private CommentRepository commentRepository;
     private BookingRepository bookingRepository;
+    private ItemRequestRepository requestRepository;
 
     @Autowired
     public ItemServiceImpl(ItemRepository repository, UserRepository userRepository,
-                           CommentRepository commentRepository, BookingRepository bookingRepository) {
+                           CommentRepository commentRepository, BookingRepository bookingRepository,
+                           ItemRequestRepository requestRepository) {
         this.repository = repository;
         this.userRepository = userRepository;
         this.commentRepository = commentRepository;
         this.bookingRepository = bookingRepository;
+        this.requestRepository = requestRepository;
     }
 
     @Override
@@ -97,8 +102,14 @@ public class ItemServiceImpl implements ItemService {
 
         checkUser(userId);
         User currentUser = userRepository.findById(userId).get();
-
         Item newItem = ItemMapper.mapToItem(item);
+
+        Long requestId = item.getRequestId();
+        if (requestId != null) {
+            ItemRequest itemRequest = requestRepository.findById(requestId).get();
+            newItem.setRequest(itemRequest);
+        }
+
         newItem.setOwner(userRepository.findById(userId).get());
         newItem = repository.save(newItem);
 

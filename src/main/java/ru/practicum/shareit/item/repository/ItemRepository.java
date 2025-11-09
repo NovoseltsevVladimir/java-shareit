@@ -4,6 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.item.model.ItemForRequests;
 
 import java.util.List;
 
