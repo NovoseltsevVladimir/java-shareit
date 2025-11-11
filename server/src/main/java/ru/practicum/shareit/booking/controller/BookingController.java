@@ -25,7 +25,7 @@ public class BookingController {
     }
 
     @PostMapping
-    public BookingDto create(@Valid @RequestBody NewBookingDto bookingDto,
+    public BookingDto create(@RequestBody NewBookingDto bookingDto,
                              @RequestHeader(USER_ID_HEADER_NAME) long bookerId) {
 
         bookingDto.setBookerId(bookerId);

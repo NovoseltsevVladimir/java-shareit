@@ -13,11 +13,8 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class NewBookingDto {
-    @FutureOrPresent
     private LocalDateTime start;
-    @Future
     private LocalDateTime end;
-    @NotNull
     private Long itemId;
     private Long bookerId;
 

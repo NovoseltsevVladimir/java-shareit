@@ -37,13 +37,13 @@ public class ItemController {
     }
 
     @PostMapping
-    public ItemDto create(@Valid @RequestBody NewItemDto item,
+    public ItemDto create(@RequestBody NewItemDto item,
                           @RequestHeader(USER_ID_HEADER_NAME) long userId) {
         return itemService.create(item, userId);
     }
 
     @PatchMapping("/{itemId}")
-    public ItemDto update(@Valid @RequestBody UpdateItemDto newItem,
+    public ItemDto update(@RequestBody UpdateItemDto newItem,
                           @PathVariable("itemId") Long itemId,
                           @RequestHeader(USER_ID_HEADER_NAME) long userId) {
         newItem.setId(itemId);
@@ -67,7 +67,7 @@ public class ItemController {
 
     //POST /items/{itemId}/comment
     @PostMapping("{itemId}/comment")
-    public CommentDto createComment(@Valid @RequestBody NewCommentDto newComment,
+    public CommentDto createComment(@RequestBody NewCommentDto newComment,
                                     @PathVariable("itemId") Long itemId,
                                     @RequestHeader(USER_ID_HEADER_NAME) long userId) {
 
@@ -76,10 +76,4 @@ public class ItemController {
 
         return itemService.createComment(newComment);
     }
-
-//    Реализуйте ещё одну полезную опцию в вашем приложении, чтобы пользователи смогли отвечать на запросы друг друга.
-//    Для этого при создании вещи должна быть возможность указать id запроса, в ответ на который создаётся нужная вещь.
-//    Добавьте поле requestId в тело запроса POST /items. Обратите внимание: должна сохраниться возможность добавить
-//    вещь и без указания requestId.
-
 }

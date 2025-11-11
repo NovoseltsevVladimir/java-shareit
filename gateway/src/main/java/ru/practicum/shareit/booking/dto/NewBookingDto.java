@@ -19,7 +19,6 @@ public class NewBookingDto {
     private LocalDateTime end;
     @NotNull
     private Long itemId;
-    @NotNull
     private Long bookerId;
 
 }

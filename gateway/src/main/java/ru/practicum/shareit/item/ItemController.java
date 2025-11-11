@@ -4,6 +4,7 @@ package ru.practicum.shareit.item;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.item.dto.*;
 
@@ -11,6 +12,7 @@ import static ru.practicum.shareit.ShareitConstants.USER_ID_HEADER_NAME;
 
 @RestController
 @RequestMapping("/items")
+@Validated
 public class ItemController {
 
     private ItemClient itemClient;

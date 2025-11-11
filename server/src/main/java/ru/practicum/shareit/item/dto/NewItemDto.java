@@ -12,11 +12,8 @@ import ru.practicum.shareit.user.model.User;
 @Getter
 @Setter
 public class NewItemDto {
-    @NotBlank
     private String name;
-    @NotBlank
     private String description;
-    @NotNull
     private Boolean available;
     private User owner;
     private Long requestId;

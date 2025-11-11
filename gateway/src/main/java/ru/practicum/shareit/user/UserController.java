@@ -3,6 +3,7 @@ package ru.practicum.shareit.user;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.user.dto.NewUserDto;
 import ru.practicum.shareit.user.dto.UpdateUserDto;
@@ -10,6 +11,7 @@ import ru.practicum.shareit.user.dto.UpdateUserDto;
 
 @RestController
 @RequestMapping(path = "/users")
+@Validated
 public class UserController {
 
     private UserClient userClient;

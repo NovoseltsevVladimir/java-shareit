@@ -9,10 +9,7 @@ import lombok.Data;
 public class UpdateUserDto {
 
     private Long id;
-    @NotNull
     private String name;
-    @NotBlank
-    @Email
     private String email;
 
     public boolean hasName() {

@@ -29,7 +29,7 @@ public class ItemRequestController {
     }
 
     @PostMapping
-    public ItemRequestDto create(@Valid @RequestBody NewItemRequestDto itemRequest,
+    public ItemRequestDto create(@RequestBody NewItemRequestDto itemRequest,
                                  @RequestHeader(USER_ID_HEADER_NAME) long userId) {
         return service.create(itemRequest, userId);
     }
@@ -49,26 +49,4 @@ public class ItemRequestController {
     public ItemRequestDtoWithAnswers getItemRequest(@PathVariable(name = "requestId") Long requestId) {
         return service.getById(requestId);
     }
-
-
-//
-//    @GetMapping("/{itemId}")
-//    public ItemDto findById(@PathVariable long itemId,
-//                            @RequestHeader(USER_ID_HEADER_NAME) long userId) {
-//        return itemService.findById(itemId, userId);
-//    }
-
-
-
-    //POST /requests — добавить новый запрос вещи.
-    // Основная часть запроса — текст запроса, в котором пользователь описывает, какая именно вещь ему нужна.
-
-
-
-    //GET /requests/all — получить список запросов, созданных другими пользователями.
-    // С помощью этого эндпоинта пользователи смогут просматривать существующие запросы, на которые они могли
-    // бы ответить. Запросы сортируются по дате создания от более новых к более старым.
-
-    //GET /requests/{requestId} — получить данные об одном конкретном запросе вместе с данными об ответах на него
-    //в том же формате, что и в эндпоинте GET /requests. Посмотреть данные об отдельном запросе может любой пользователь
 }
