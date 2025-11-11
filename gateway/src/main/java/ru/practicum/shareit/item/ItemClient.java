@@ -38,25 +38,25 @@ public class ItemClient extends BaseClient  {
         return get("/"+itemId,userId);
     }
 
-    public ResponseEntity<Object> create(NewItemDto item, long userId) {
+    public ResponseEntity<Object> create(NewItemDto item, Long userId) {
         return post("",userId, item);
     }
 
-    public ResponseEntity<Object> update(UpdateItemDto newItem, Long itemId, long userId) {
+    public ResponseEntity<Object> update(UpdateItemDto newItem, Long itemId, Long userId) {
         newItem.setId(itemId);
         return patch("/"+itemId,userId, newItem);
     }
 
-    public ResponseEntity<Object> delete(Long itemId, long userId) {
+    public ResponseEntity<Object> delete(Long itemId, Long userId) {
         return delete("/"+itemId,userId);
     }
 
-    public ResponseEntity<Object> findAvaliableItemByText(String text, long userId) {
+    public ResponseEntity<Object> findAvaliableItemByText(String text, Long userId) {
         Map<String, Object> parameters = Map.of("text", text);
         return get("/search?text={text}",userId,parameters);
     }
 
-    public ResponseEntity<Object> createComment(NewCommentDto newComment, Long itemId, long userId) {
+    public ResponseEntity<Object> createComment(NewCommentDto newComment, Long itemId, Long userId) {
         return post("/"+itemId+"/comment",userId,newComment);
     }
 }

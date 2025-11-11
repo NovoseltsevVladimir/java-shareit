@@ -23,33 +23,33 @@ public class ItemController {
     }
 
     @GetMapping
-    public ResponseEntity<Object> findAll(@RequestHeader(USER_ID_HEADER_NAME) long userId) {
+    public ResponseEntity<Object> findAll(@RequestHeader(USER_ID_HEADER_NAME) Long userId) {
         return itemClient.findAll(userId);
     }
 
     @GetMapping("/{itemId}")
-    public ResponseEntity<Object> findById(@PathVariable long itemId,
-                                           @RequestHeader(USER_ID_HEADER_NAME) long userId) {
+    public ResponseEntity<Object> findById(@PathVariable Long itemId,
+                                           @RequestHeader(USER_ID_HEADER_NAME) Long userId) {
         return itemClient.findById(itemId, userId);
     }
 
     @PostMapping
     public ResponseEntity<Object> create(@Valid @RequestBody NewItemDto item,
-                                         @RequestHeader(USER_ID_HEADER_NAME) long userId) {
+                                         @RequestHeader(USER_ID_HEADER_NAME) Long userId) {
         return itemClient.create(item, userId);
     }
 
     @PatchMapping("/{itemId}")
     public ResponseEntity<Object> update(@Valid @RequestBody UpdateItemDto newItem,
                                          @PathVariable("itemId") Long itemId,
-                                         @RequestHeader(USER_ID_HEADER_NAME) long userId) {
+                                         @RequestHeader(USER_ID_HEADER_NAME) Long userId) {
         newItem.setId(itemId);
         return itemClient.update(newItem, itemId, userId);
     }
 
     @DeleteMapping("/{itemId}")
     public ResponseEntity<Object> deleteItem(@PathVariable("id") Long itemId,
-                                             @RequestHeader(USER_ID_HEADER_NAME) long userId) {
+                                             @RequestHeader(USER_ID_HEADER_NAME) Long userId) {
 
         return itemClient.delete(itemId, userId);
     }
@@ -57,7 +57,7 @@ public class ItemController {
     @GetMapping("/search")
     public ResponseEntity<Object> findAvaliableItemByText(
             @RequestParam(name = "text", required = true) String text,
-            @RequestHeader(USER_ID_HEADER_NAME) long userId) {
+            @RequestHeader(USER_ID_HEADER_NAME) Long userId) {
 
         return itemClient.findAvaliableItemByText(text, userId);
     }
@@ -65,7 +65,7 @@ public class ItemController {
     @PostMapping("{itemId}/comment")
     public ResponseEntity<Object> createComment(@Valid @RequestBody NewCommentDto newComment,
                                                 @PathVariable("itemId") Long itemId,
-                                                @RequestHeader(USER_ID_HEADER_NAME) long userId) {
+                                                @RequestHeader(USER_ID_HEADER_NAME) Long userId) {
 
         newComment.setItemId(itemId);
         newComment.setAuthorId(userId);

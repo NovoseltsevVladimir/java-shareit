@@ -29,30 +29,30 @@ public class BookingClient extends BaseClient {
         );
     }
 
-    public ResponseEntity<Object> create(long userId, NewBookingDto requestDto) {
+    public ResponseEntity<Object> create(Long userId, NewBookingDto requestDto) {
         return post("", userId, requestDto);
     }
 
-    public ResponseEntity<Object> changeBookingStatus(Long bookingId, boolean approved, long userId) {
+    public ResponseEntity<Object> changeBookingStatus(Long bookingId, boolean approved, Long userId) {
         return patch("/" + bookingId + "?approved="+approved, userId);
     }
 
-    public ResponseEntity<Object> getBookingInformation(Long bookingId, long userId) {
+    public ResponseEntity<Object> getBookingInformation(Long bookingId, Long userId) {
 
         return get("/" + bookingId, userId);
     }
 
-    public ResponseEntity<Object> getBookingInformation(Long bookingId, String state, long userId) {
+    public ResponseEntity<Object> getBookingInformation(Long bookingId, String state, Long userId) {
         Map<String, Object> parameters = Map.of("state", state);
         return get("/" + bookingId, userId, parameters);
     }
 
-    public ResponseEntity<Object> getOwnersBookingList(String state, long userId) {
+    public ResponseEntity<Object> getOwnersBookingList(String state, Long userId) {
         Map<String, Object> parameters = Map.of("state", state);
         return get("/owner", userId, parameters);
     }
 
-    public ResponseEntity<Object> getBookersBookingList(String state, long userId) {
+    public ResponseEntity<Object> getBookersBookingList(String state, Long userId) {
         Map<String, Object> parameters = Map.of("state", state);
         return get("", userId, parameters);
     }

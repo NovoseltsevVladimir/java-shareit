@@ -27,7 +27,7 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<Object> findById(@PathVariable long userId) {
+    public ResponseEntity<Object> findById(@PathVariable Long userId) {
         return userClient.findById(userId);
     }
 
@@ -38,7 +38,7 @@ public class UserController {
 
     @PatchMapping("/{userId}")
     public ResponseEntity<Object> update(@RequestBody UpdateUserDto newUser,
-                          @PathVariable long userId) {
+                          @PathVariable Long userId) {
         newUser.setId(userId);
         return userClient.update(newUser);
     }
