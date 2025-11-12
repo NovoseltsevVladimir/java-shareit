@@ -74,14 +74,14 @@ public class ItemRequestService {
                 .collect(Collectors.toList());
     }
 
-    public ItemRequestDtoWithAnswers getById (Long requestId) {
+    public ItemRequestDtoWithAnswers getById(Long requestId) {
         ItemRequest request = repository.findById(requestId).get();
         if (request == null) {
             String bugText = "Запрос не найден. id " + requestId;
             throw new NotFoundException(bugText);
         }
 
-        List <Long> requestsId = new ArrayList<>();
+        List<Long> requestsId = new ArrayList<>();
         requestsId.add(requestId);
 
         List<ItemForRequests> answers = repositoryForRequests.findByRequests(requestsId);

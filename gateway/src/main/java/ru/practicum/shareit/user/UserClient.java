@@ -41,7 +41,7 @@ public class UserClient extends BaseClient {
 
     public ResponseEntity<Object> update(UpdateUserDto newUser) {
         Long userId = newUser.getId();
-        return patch("/" + userId,userId, newUser);
+        return patch("/" + userId, userId, newUser);
     }
 
     public ResponseEntity<Object> delete(Long userId) {

@@ -9,6 +9,6 @@ import java.util.List;
 @Setter
 @Getter
 @NoArgsConstructor
-public class ItemRequestDtoWithAnswers extends ItemRequestDto{
+public class ItemRequestDtoWithAnswers extends ItemRequestDto {
     private List<Long> itemsId;
 }

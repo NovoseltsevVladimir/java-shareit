@@ -17,7 +17,7 @@ import java.util.Map;
 import static ru.practicum.shareit.ShareitConstants.SERVER_URL_PARAMETER_NAME;
 
 @Service
-public class ItemClient extends BaseClient  {
+public class ItemClient extends BaseClient {
     private static final String API_PREFIX = "/items";
 
     @Autowired
@@ -35,28 +35,28 @@ public class ItemClient extends BaseClient  {
     }
 
     public ResponseEntity<Object> findById(Long itemId, Long userId) {
-        return get("/"+itemId,userId);
+        return get("/" + itemId, userId);
     }
 
     public ResponseEntity<Object> create(NewItemDto item, Long userId) {
-        return post("",userId, item);
+        return post("", userId, item);
     }
 
     public ResponseEntity<Object> update(UpdateItemDto newItem, Long itemId, Long userId) {
         newItem.setId(itemId);
-        return patch("/"+itemId,userId, newItem);
+        return patch("/" + itemId, userId, newItem);
     }
 
     public ResponseEntity<Object> delete(Long itemId, Long userId) {
-        return delete("/"+itemId,userId);
+        return delete("/" + itemId, userId);
     }
 
     public ResponseEntity<Object> findAvaliableItemByText(String text, Long userId) {
         Map<String, Object> parameters = Map.of("text", text);
-        return get("/search?text={text}",userId,parameters);
+        return get("/search?text={text}", userId, parameters);
     }
 
     public ResponseEntity<Object> createComment(NewCommentDto newComment, Long itemId, Long userId) {
-        return post("/"+itemId+"/comment",userId,newComment);
+        return post("/" + itemId + "/comment", userId, newComment);
     }
 }

@@ -36,7 +36,7 @@ public class ItemRequestMapper {
     }
 
     public static ItemRequestDtoWithAnswers mapToItemRequestDtoWithAnswers(ItemRequest itemRequest,
-                                                                List<ItemForRequests> answers) {
+                                                                           List<ItemForRequests> answers) {
 
         ItemRequestDtoWithAnswers dto = new ItemRequestDtoWithAnswers();
         dto.setId(itemRequest.getId());

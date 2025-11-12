@@ -29,18 +29,18 @@ public class ItemRequestClient extends BaseClient {
 
 
     public ResponseEntity<Object> create(NewItemRequestDto itemRequest, long userId) {
-        return post("",userId,itemRequest);
+        return post("", userId, itemRequest);
     }
 
     public ResponseEntity<Object> getAllWithAnswers(long userId) {
-        return get("",userId);
+        return get("", userId);
     }
 
     public ResponseEntity<Object> getAllWithoutCurrentUser(long userId) {
-        return get("/all",userId);
+        return get("/all", userId);
     }
 
     public ResponseEntity<Object> getItemRequest(@PathVariable(name = "requestId") Long requestId) {
-        return get("/"+requestId);
+        return get("/" + requestId);
     }
 }
