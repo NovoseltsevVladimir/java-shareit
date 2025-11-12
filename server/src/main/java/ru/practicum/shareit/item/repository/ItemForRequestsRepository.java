@@ -11,8 +11,4 @@ public interface ItemForRequestsRepository extends JpaRepository<ItemForRequests
     @Query("select i from ItemForRequests i " +
             "where i.requestId IN (?1)")
     List<ItemForRequests> findByRequests(List<Long> idListOfRequests);
-
-    @Query("select i from ItemForRequests i " +
-            "where i.requestId IN (?1) and i.ownerId = ?2")
-    List<ItemForRequests> findByRequestsAndOwner(List<Long> idListOfRequests, Long ownerId);
 }
