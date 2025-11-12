@@ -37,13 +37,10 @@ class UserServiceImplTest {
 
     @Test
     void createUser() {
-        // given
         NewUserDto userDto = makeUserDto("petya@mail.com", "Petya");
 
-        // when
         service.create(userDto);
 
-        // then
         TypedQuery<User> query = em.createQuery("Select u from User u where u.email = :email", User.class);
         User user = query.setParameter("email", userDto.getEmail())
                 .getSingleResult();
@@ -95,7 +92,6 @@ class UserServiceImplTest {
 
     @Test
     void getAllUsers() {
-        // given
         List<NewUserDto> sourceUsers = List.of(
                 makeUserDto("petya@mail.com", "Petya"),
                 makeUserDto("vanya@mail.com", "Vanya"),
@@ -108,10 +104,8 @@ class UserServiceImplTest {
         }
         em.flush();
 
-        // when
         Collection<UserDto> targetUsers = service.findAll();
 
-        // then
         assertThat(targetUsers, hasSize(sourceUsers.size()));
         for (NewUserDto sourceUser : sourceUsers) {
             assertThat(targetUsers, hasItem(allOf(
@@ -124,10 +118,8 @@ class UserServiceImplTest {
 
     @Test
     void getUserById() {
-        // given
         NewUserDto newUserDto = makeUserDto("petya@mail.com", "Petya");
 
-        // when
         UserDto userDto = service.create(newUserDto);
 
         TypedQuery<User> query = em.createQuery("Select u from User u where u.id = :id", User.class);
