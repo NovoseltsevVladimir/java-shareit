@@ -1,4 +1,4 @@
-package ru.practicum.shareit;
+package ru.practicum.shareit.user;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,7 +16,10 @@ import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.service.UserService;
 
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -24,8 +27,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+//MockMvc тестирование
+//Для каждого эндпоинта
+
 @ExtendWith(MockitoExtension.class)
-class UserControllerTest {
+class UserControllerMockMvcTest {
     @Mock
     private UserService userService;
 
@@ -51,7 +57,7 @@ class UserControllerTest {
     }
 
     @Test
-    void saveNewUser() throws Exception {
+    void createUser() throws Exception {
         when(userService.create(any()))
                 .thenReturn(userDto);
 
@@ -67,7 +73,7 @@ class UserControllerTest {
     }
 
     @Test
-    void getUser() throws Exception {
+    void findUserById() throws Exception {
         when(userService.findById(userDto.getId()))
                 .thenReturn(userDto);
 
@@ -91,6 +97,35 @@ class UserControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    void findAllUsers() throws Exception {
+
+        UserDto userDtoForList = new UserDto();
+        userDtoForList.setName("Vasya");
+        userDtoForList.setEmail("vasya@mail.com");
+        userDtoForList.setId(2L);
+
+        List<UserDto> usersDto = new ArrayList<>();
+        usersDto.add(userDto);
+        usersDto.add(userDtoForList);
+
+        when(userService.findAll())
+                .thenReturn(usersDto);
+
+        mvc.perform(get("/users/")
+                        .characterEncoding(StandardCharsets.UTF_8)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$[0].id", is(userDto.getId()), Long.class))
+                .andExpect(jsonPath("$[0].name", is(userDto.getName())))
+                .andExpect(jsonPath("$[0].email", is(userDto.getEmail())))
+                .andExpect(jsonPath("$[1].id", is(userDtoForList.getId()), Long.class))
+                .andExpect(jsonPath("$[1].name", is(userDtoForList.getName())))
+                .andExpect(jsonPath("$[1].email", is(userDtoForList.getEmail())));
     }
 
     @Test

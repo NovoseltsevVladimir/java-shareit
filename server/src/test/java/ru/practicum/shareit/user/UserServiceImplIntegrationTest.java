@@ -1,4 +1,4 @@
-package ru.practicum.shareit;
+package ru.practicum.shareit.user;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
@@ -25,12 +25,15 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.Matchers.hasProperty;
 
+//Интеграционные тесты
+//1 тест для самого крупного метода
+
 @Transactional
 @SpringBootTest(
         properties = "jdbc.url=jdbc:postgresql://localhost:5432/test",
         webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
-class UserServiceImplTest {
+class UserServiceImplIntegrationTest {
 
     private final EntityManager em;
     private final UserService service;
