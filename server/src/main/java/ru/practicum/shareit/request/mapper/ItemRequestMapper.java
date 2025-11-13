@@ -1,11 +1,12 @@
 package ru.practicum.shareit.request.mapper;
 
 import org.springframework.stereotype.Component;
-import ru.practicum.shareit.item.model.ItemForRequests;
+import ru.practicum.shareit.item.dto.ItemForRequestsDto;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.dto.ItemRequestDtoWithAnswers;
 import ru.practicum.shareit.request.dto.NewItemRequestDto;
 import ru.practicum.shareit.request.model.ItemRequest;
+import ru.practicum.shareit.user.mapper.UserMapper;
 import ru.practicum.shareit.user.model.User;
 
 import java.time.LocalDateTime;
@@ -30,19 +31,19 @@ public class ItemRequestMapper {
         dto.setId(itemRequest.getId());
         dto.setCreated(itemRequest.getCreated());
         dto.setDescription(itemRequest.getDescription());
-        dto.setRequestor(itemRequest.getRequestor());
+        dto.setRequestor(UserMapper.mapToUserDto(itemRequest.getRequestor()));
 
         return dto;
     }
 
     public static ItemRequestDtoWithAnswers mapToItemRequestDtoWithAnswers(ItemRequest itemRequest,
-                                                                           List<ItemForRequests> answers) {
+                                                                           List<ItemForRequestsDto> answers) {
 
         ItemRequestDtoWithAnswers dto = new ItemRequestDtoWithAnswers();
         dto.setId(itemRequest.getId());
         dto.setCreated(itemRequest.getCreated());
         dto.setDescription(itemRequest.getDescription());
-        dto.setRequestor(itemRequest.getRequestor());
+        dto.setRequestor(UserMapper.mapToUserDto(itemRequest.getRequestor()));
         dto.setItems(answers);
 
         return dto;

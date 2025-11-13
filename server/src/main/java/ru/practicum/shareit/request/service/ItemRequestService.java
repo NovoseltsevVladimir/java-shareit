@@ -3,8 +3,9 @@ package ru.practicum.shareit.request.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.exception.NotFoundException;
-import ru.practicum.shareit.item.model.ItemForRequests;
-import ru.practicum.shareit.item.repository.ItemForRequestsRepository;
+import ru.practicum.shareit.item.dto.ItemForRequestsDto;
+import ru.practicum.shareit.item.mapper.ItemMapper;
+import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.dto.ItemRequestDtoWithAnswers;
 import ru.practicum.shareit.request.dto.NewItemRequestDto;
@@ -21,14 +22,14 @@ import java.util.stream.Collectors;
 @Service
 public class ItemRequestService {
     private ItemRequestRepository repository;
-    private ItemForRequestsRepository repositoryForRequests;
     private UserService userService;
+    private ItemRepository itemRepository;
 
     @Autowired
-    public ItemRequestService(ItemRequestRepository repository, ItemForRequestsRepository repositoryForRequests, UserService userService) {
+    public ItemRequestService(ItemRequestRepository repository, UserService userService, ItemRepository itemRepository) {
         this.repository = repository;
-        this.repositoryForRequests = repositoryForRequests;
         this.userService = userService;
+        this.itemRepository = itemRepository;
     }
 
     public ItemRequestDto create(NewItemRequestDto newItemRequest, Long userId) {
@@ -49,11 +50,14 @@ public class ItemRequestService {
                 .map(item -> item.getId())
                 .collect(Collectors.toList());
 
-        List<ItemForRequests> answers = repositoryForRequests.findByRequests(requestsId);
+        List<ItemForRequestsDto> answers = itemRepository.findByRequestIdIn(requestsId)
+                .stream()
+                .map(item -> ItemMapper.mapToItemForRequestsDto(item))
+                .collect(Collectors.toList());
 
         List<ItemRequestDtoWithAnswers> result = new ArrayList<>();
         for (ItemRequest itemRequest : requests) {
-            List<ItemForRequests> currentAnswers = answers
+            List<ItemForRequestsDto> currentAnswers = answers
                     .stream()
                     .filter(itemForRequests ->
                             itemForRequests.getRequestId().equals(itemRequest.getId()))
@@ -84,7 +88,10 @@ public class ItemRequestService {
         List<Long> requestsId = new ArrayList<>();
         requestsId.add(requestId);
 
-        List<ItemForRequests> answers = repositoryForRequests.findByRequests(requestsId);
+        List<ItemForRequestsDto> answers = itemRepository.findByRequestIdIn(requestsId)
+                .stream()
+                .map(item -> ItemMapper.mapToItemForRequestsDto(item))
+                .collect(Collectors.toList());;
 
         return ItemRequestMapper.mapToItemRequestDtoWithAnswers(request, answers);
     }
