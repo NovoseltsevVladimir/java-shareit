@@ -30,8 +30,8 @@ public class Item {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "avaliable")
-    private boolean avaliable;
+    @Column(name = "available")
+    private boolean available;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "owner_id")

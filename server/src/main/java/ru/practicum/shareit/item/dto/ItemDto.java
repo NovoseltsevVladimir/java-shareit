@@ -18,7 +18,7 @@ public class ItemDto {
     private Long id;
     private String name;
     private String description;
-    private Boolean avaliable;
+    private Boolean available;
     private User owner;
     private ItemRequest request;
     private LocalDateTime lastBooking;

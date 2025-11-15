@@ -14,7 +14,6 @@ public class NewItemDto {
     private String name;
     @NotBlank
     private String description;
-    @NotNull
     private Boolean available;
     private Long ownerId;
     private Long requestId;

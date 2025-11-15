@@ -87,7 +87,7 @@ public class ItemControllerMockMvcTest {
         itemDto1.setId(1L);
         itemDto1.setOwner(user);
         itemDto1.setDescription("lalalalalala");
-        itemDto1.setAvaliable(true);
+        itemDto1.setAvailable(true);
         itemDto1.setName("lalala");
         itemDto1.setComments(comments);
 
@@ -95,7 +95,7 @@ public class ItemControllerMockMvcTest {
         itemDto2.setId(2L);
         itemDto2.setOwner(user);
         itemDto2.setDescription("tutututututu");
-        itemDto2.setAvaliable(true);
+        itemDto2.setAvailable(true);
         itemDto2.setName("tututu");
         itemDto2.setComments(comments);
 

@@ -31,6 +31,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -90,7 +91,7 @@ public class ItemServiceImpl implements ItemService {
             throw new NotFoundException(bugText);
         }
 
-        if (item.isAvaliable() == false) {
+        if (item.isAvailable() == false) {
             throw new NotAvaliableException("Вещь недоступна для бронирования");
         }
 
@@ -106,8 +107,12 @@ public class ItemServiceImpl implements ItemService {
 
         Long requestId = item.getRequestId();
         if (requestId != null) {
-            ItemRequest itemRequest = requestRepository.findById(requestId).get();
-            newItem.setRequest(itemRequest);
+            Optional<ItemRequest> itemRequestOptional = requestRepository.findById(requestId);
+
+            if (itemRequestOptional.isPresent()) {
+                newItem.setRequest(itemRequestOptional.get());
+            }
+
         }
 
         newItem.setOwner(userRepository.findById(userId).get());

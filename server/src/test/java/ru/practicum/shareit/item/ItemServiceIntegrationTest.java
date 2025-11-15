@@ -72,7 +72,7 @@ class ItemServiceIntegrationTest {
                     hasProperty("id", notNullValue()),
                     hasProperty("description", equalTo(itemRequestDto.getDescription())),
                     hasProperty("name", equalTo(itemRequestDto.getName())),
-                    hasProperty("avaliable", equalTo(itemRequestDto.getAvaliable())),
+                    hasProperty("available", equalTo(itemRequestDto.getAvailable())),
                     hasProperty("owner", equalTo(itemRequestDto.getOwner())),
                     hasProperty("request", equalTo(itemRequestDto.getRequest()))
 

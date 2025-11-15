@@ -9,6 +9,7 @@ import org.springframework.boot.test.json.JsonContent;
 import ru.practicum.shareit.item.dto.ItemDto;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
@@ -30,6 +31,8 @@ public class ItemDtoJsonTest {
 
         JsonContent<ItemDto> result = jsonDto.write(dto);
 
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS");
+
         assertThat(result).extractingJsonPathNumberValue("$.id").isEqualTo(dto.getId().intValue());
         assertThat(result).extractingJsonPathNumberValue("$.ownerId")
                 .isEqualTo(dto.getOwnerId().intValue());
@@ -39,9 +42,9 @@ public class ItemDtoJsonTest {
         assertThat(result).extractingJsonPathStringValue("$.description")
                 .isEqualTo(dto.getDescription());
         assertThat(result).extractingJsonPathStringValue("$.nextBooking")
-                .isEqualTo(dto.getNextBooking().toString());
+                .isEqualTo(dto.getNextBooking().format(formatter));
         assertThat(result).extractingJsonPathStringValue("$.lastBooking")
-                .isEqualTo(dto.getLastBooking().toString());
+                .isEqualTo(dto.getLastBooking().format(formatter));
     }
 
 }

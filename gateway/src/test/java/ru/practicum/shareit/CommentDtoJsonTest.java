@@ -18,7 +18,7 @@ public class CommentDtoJsonTest {
     private final JacksonTester<CommentDto> jsonDto;
 
     @Test
-    void testUserDto() throws Exception {
+    void testCommentDto() throws Exception {
         CommentDto dto = new CommentDto();
         dto.setText("Молоток отличный");
         dto.setAuthorName("Petya");
