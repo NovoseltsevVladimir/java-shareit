@@ -32,5 +32,4 @@ public class UserDtoJsonTest {
         assertThat(result).extractingJsonPathStringValue("$.email")
                 .isEqualTo(userDto.getEmail());
     }
-
 } 
