@@ -38,7 +38,6 @@ import static ru.practicum.shareit.ShareitConstants.USER_ID_HEADER_NAME;
 
 //MockMvc тестирование
 //Для каждого эндпоинта
-
 @ExtendWith(MockitoExtension.class)
 class RequestControllerMockMvcTest {
     @Mock
@@ -100,7 +99,7 @@ class RequestControllerMockMvcTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(itemRequestDto1.getId()), Long.class))
                 .andExpect(jsonPath("$.description", is(itemRequestDto1.getDescription())))
-                .andExpect(jsonPath("$.requestor.id", is(itemRequestDto1.getRequestor().getId().intValue())))
+                .andExpect(jsonPath("$.requestor.id", is(itemRequestDto1.getRequestor().getId()), Long.class))
                 .andExpect(jsonPath("$.requestor.name", is(itemRequestDto1.getRequestor().getName())))
                 .andExpect(jsonPath("$.requestor.email", is(itemRequestDto1.getRequestor().getEmail())))
                 .andExpect(jsonPath("$.created").exists())
@@ -127,7 +126,8 @@ class RequestControllerMockMvcTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(requestDtoWithAnswers.getId()), Long.class))
                 .andExpect(jsonPath("$.description", is(requestDtoWithAnswers.getDescription())))
-                .andExpect(jsonPath("$.requestor.id", is(requestDtoWithAnswers.getRequestor().getId().intValue())))
+                .andExpect(jsonPath("$.requestor.id", is(requestDtoWithAnswers.getRequestor().getId()),
+                        Long.class))
                 .andExpect(jsonPath("$.requestor.name", is(requestDtoWithAnswers.getRequestor().getName())))
                 .andExpect(jsonPath("$.requestor.email", is(requestDtoWithAnswers.getRequestor().getEmail())))
                 .andExpect(jsonPath("$.created").exists())
@@ -189,7 +189,8 @@ class RequestControllerMockMvcTest {
                 .andExpect(jsonPath("$", hasSize(2)))
                 .andExpect(jsonPath("$[0].id", is(requestDtoWithAnswers1.getId()), Long.class))
                 .andExpect(jsonPath("$[0].description", is(requestDtoWithAnswers1.getDescription())))
-                .andExpect(jsonPath("$[0].requestor.id", is(requestDtoWithAnswers1.getRequestor().getId().intValue())))
+                .andExpect(jsonPath("$[0].requestor.id", is(requestDtoWithAnswers1.getRequestor().getId()),
+                        Long.class))
                 .andExpect(jsonPath("$[0].requestor.name", is(requestDtoWithAnswers1.getRequestor().getName())))
                 .andExpect(jsonPath("$[0].requestor.email", is(requestDtoWithAnswers1.getRequestor().getEmail())))
                 .andExpect(jsonPath("$[0].created").exists())
@@ -198,7 +199,8 @@ class RequestControllerMockMvcTest {
                 .andExpect(jsonPath("$[0].items[1].name", is(item2.getName())))
                 .andExpect(jsonPath("$[1].id", is(requestDtoWithAnswers2.getId()), Long.class))
                 .andExpect(jsonPath("$[1].description", is(requestDtoWithAnswers2.getDescription())))
-                .andExpect(jsonPath("$[1].requestor.id", is(requestDtoWithAnswers2.getRequestor().getId().intValue())))
+                .andExpect(jsonPath("$[1].requestor.id", is(requestDtoWithAnswers2.getRequestor().getId()),
+                        Long.class))
                 .andExpect(jsonPath("$[1].requestor.name", is(requestDtoWithAnswers2.getRequestor().getName())))
                 .andExpect(jsonPath("$[1].requestor.email", is(requestDtoWithAnswers2.getRequestor().getEmail())))
                 .andExpect(jsonPath("$[1].created").exists())

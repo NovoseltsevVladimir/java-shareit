@@ -27,7 +27,6 @@ import static org.hamcrest.Matchers.hasProperty;
 
 //Интеграционные тесты
 //1 тест для самого крупного метода
-
 @Transactional
 @SpringBootTest(
         properties = "jdbc.url=jdbc:postgresql://localhost:5432/test",
