@@ -30,7 +30,6 @@ public class BookingDtoJsonTest {
         dto.setBookerId(3L);
 
         JsonContent<BookingDto> result = jsonDto.write(dto);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS");
 
         assertThat(result).extractingJsonPathNumberValue("$.id").isEqualTo(dto.getId().intValue());
         assertThat(result).extractingJsonPathNumberValue("$.bookerId")
@@ -40,9 +39,9 @@ public class BookingDtoJsonTest {
 
         assertThat(result).extractingJsonPathStringValue("$.status").isEqualTo(dto.getStatus().toString());
         assertThat(result).extractingJsonPathStringValue("$.start")
-                .isEqualTo(dto.getStart().format(formatter));
+                .isEqualTo(dto.getStart().toString());
         assertThat(result).extractingJsonPathStringValue("$.end")
-                .isEqualTo(dto.getEnd().format(formatter));
+                .isEqualTo(dto.getEnd().toString());
     }
 
 }

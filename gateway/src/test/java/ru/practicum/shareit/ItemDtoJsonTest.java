@@ -31,8 +31,6 @@ public class ItemDtoJsonTest {
 
         JsonContent<ItemDto> result = jsonDto.write(dto);
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS");
-
         assertThat(result).extractingJsonPathNumberValue("$.id").isEqualTo(dto.getId().intValue());
         assertThat(result).extractingJsonPathNumberValue("$.ownerId")
                 .isEqualTo(dto.getOwnerId().intValue());
@@ -42,9 +40,9 @@ public class ItemDtoJsonTest {
         assertThat(result).extractingJsonPathStringValue("$.description")
                 .isEqualTo(dto.getDescription());
         assertThat(result).extractingJsonPathStringValue("$.nextBooking")
-                .isEqualTo(dto.getNextBooking().format(formatter));
+                .isEqualTo(dto.getNextBooking().toString());
         assertThat(result).extractingJsonPathStringValue("$.lastBooking")
-                .isEqualTo(dto.getLastBooking().format(formatter));
+                .isEqualTo(dto.getLastBooking().toString());
     }
 
 }
