@@ -39,7 +39,7 @@ import static ru.practicum.shareit.ShareitConstants.USER_ID_HEADER_NAME;
 //MockMvc тестирование
 //Для каждого эндпоинта
 @ExtendWith(MockitoExtension.class)
-class RequestControllerMockMvcTest {
+class ItemRequestControllerMockMvcTest {
     @Mock
     private ItemRequestService itemRequestService;
 
