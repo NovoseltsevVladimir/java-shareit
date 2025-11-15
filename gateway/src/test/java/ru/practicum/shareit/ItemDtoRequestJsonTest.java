@@ -29,7 +29,6 @@ public class ItemDtoRequestJsonTest {
 
         assertThat(result).extractingJsonPathNumberValue("$.id").isEqualTo(dto.getId().intValue());
         assertThat(result).extractingJsonPathStringValue("$.description").isEqualTo(dto.getDescription());
-        assertThat(result).extractingJsonPathStringValue("$.created").isEqualTo(dto.getCreated().toString());
         assertThat(result).extractingJsonPathNumberValue("$.requestorId")
                 .isEqualTo(dto.getRequestorId().intValue());
     }

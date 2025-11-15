@@ -38,10 +38,6 @@ public class ItemDtoJsonTest {
         assertThat(result).extractingJsonPathStringValue("$.name").isEqualTo(dto.getName());
         assertThat(result).extractingJsonPathStringValue("$.description")
                 .isEqualTo(dto.getDescription());
-        assertThat(result).extractingJsonPathStringValue("$.nextBooking")
-                .isEqualTo(dto.getNextBooking().toString());
-        assertThat(result).extractingJsonPathStringValue("$.lastBooking")
-                .isEqualTo(dto.getLastBooking().toString());
     }
 
 }

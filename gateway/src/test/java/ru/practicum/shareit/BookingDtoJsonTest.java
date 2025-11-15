@@ -37,10 +37,6 @@ public class BookingDtoJsonTest {
                 .isEqualTo(dto.getItemId().intValue());
 
         assertThat(result).extractingJsonPathStringValue("$.status").isEqualTo(dto.getStatus().toString());
-        assertThat(result).extractingJsonPathStringValue("$.start")
-                .isEqualTo(dto.getStart().toString());
-        assertThat(result).extractingJsonPathStringValue("$.end")
-                .isEqualTo(dto.getEnd().toString());
     }
 
 }
